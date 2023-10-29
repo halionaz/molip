@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import style from "./Editor.module.css";
+import uid from "../Uid.js";
 
-const initialBlock = {id : 0, html: "에디터일겁니다", tag: "p"};
+const initialBlock = {id : uid(), html: "에디터일겁니다", tag: "p"};
 
 const Editor = () => {
 
