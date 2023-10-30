@@ -1,20 +1,20 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ContentEditable from "react-contenteditable";
 
-const EditableBlock = ({ html, tagName }) => {
-    const [content, setContent] = useState({ html, tagName });
-    const contentEditable = useRef(null);
+const EditableBlock = ({ id, tag, html}) => {
+
+    const [content, setContent] = useState({ id, tag, html });
 
     const onChangeHandler = (e) => {
+        // 입력 시 content에 담김
         setContent({ ...content, html: e.target.value });
-    };
+    }
 
     return (
         <ContentEditable
-            className={"Block"}
-            innerRef={contentEditable}
+            className="block"
+            tagName={content.tag}
             html={content.html}
-            tagName={content.tagName}
             onChange={onChangeHandler}
         />
     );
