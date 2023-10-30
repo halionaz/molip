@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import './globals.css'
 
 export const metadata = {
@@ -10,7 +9,7 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <h1><Link href="/">mol.ip</Link></h1>
+        <h1>mol.ip</h1>
         {children}
       </body>
     </html>

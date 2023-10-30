@@ -2,8 +2,8 @@
 
 import Editor from "@/components/Editor/Editor";
 
-const AmugaeProject = () => {
+const LoremProject = () => {
     return <Editor />
 }
 
-export default AmugaeProject;
+export default LoremProject;
