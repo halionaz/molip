@@ -44,6 +44,19 @@ const Editor = () => {
         setBlocks(updatedBlocks);
     };
 
+    const deleteBlockHandler = (curBlock) => {
+        const prevBlock = curBlock.ref.previousElementSibling;
+        console.log(prevBlock);
+        if (prevBlock) {
+            // 그 전 블럭이 존재할 때만 블럭 삭제
+            const index = blocks.map((block) => block.id).indexOf(curBlock.id);
+            const updatedBlocks = [...blocks];
+            // curBlock 삭제
+            updatedBlocks.splice(index, 1);
+            setBlocks(updatedBlocks);
+        }
+    };
+
     return (
         <div className={style.editor}>
             {blocks.map((block, key) => {
@@ -54,6 +67,7 @@ const Editor = () => {
                         tag={block.tag}
                         html={block.html}
                         addBlock={addBlockHandler}
+                        deleteBlock={deleteBlockHandler}
                     />
                 );
             })}
