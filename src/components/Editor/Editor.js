@@ -21,21 +21,19 @@ const Editor = () => {
     // 현재 에디터에 있는 블럭들을 저장하는 state
     const [blocks, setBlocks] = useState([initialBlock]);
     const newBlockRef = useRef(null);
-    const deletedPrevBlockRef = useRef(null);
 
     const updateEditorHandler = (updatedBlock) => {
-        // blocks state는 배열이라 그 내부에 있는 각각의 block object들이
-        // 자동으로 최신화 되지 않음
-        // 따라서 따로 함수로 update 될 때마다 state 관리
+        // blocks state의 변경들을 관리하는 함수
+        // 각 블럭에서 생기는 편집들을 일괄 관리
         const index = blocks.map((block) => block.id).indexOf(updatedBlock.id);
         const updatedBlocks = [...blocks];
         updatedBlocks[index] = {
             ...updatedBlocks[index],
-            tag : updatedBlock.tag,
-            html : updatedBlock.html
+            tag: updatedBlock.tag,
+            html: updatedBlock.html,
         };
         setBlocks(updatedBlocks);
-    }
+    };
 
     useEffect(() => {
         // blocks 생성 후 그 다음 블럭으로 커서를 옮김
@@ -47,13 +45,6 @@ const Editor = () => {
             newBlockRef.current.nextElementSibling.focus();
             newBlockRef.current = null;
         }
-        if (deletedPrevBlockRef.current !== null) {
-            // blocks가 바뀌었고, 블럭이 삭제되어 전 블럭의 정보가 있는 경우
-            // 포커스 옮겨주기
-            deletedPrevBlockRef.current.focus();
-            deletedPrevBlockRef.current = null;
-        }
-        console.log(blocks);
     }, [blocks]);
 
     const addBlockHandler = (curBlock) => {
@@ -75,7 +66,8 @@ const Editor = () => {
             // curBlock 삭제
             console.log(blocks);
             updatedBlocks.splice(index, 1);
-            deletedPrevBlockRef.current = prevBlock;
+            prevBlock.focus();
+            /* 커서를 prevBlock의 가장 마지막으로 옮겨주어야 함! */
             setBlocks(updatedBlocks);
         }
     };
