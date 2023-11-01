@@ -23,6 +23,20 @@ const Editor = () => {
     const newBlockRef = useRef(null);
     const deletedPrevBlockRef = useRef(null);
 
+    const updateEditorHandler = (updatedBlock) => {
+        // blocks state는 배열이라 그 내부에 있는 각각의 block object들이
+        // 자동으로 최신화 되지 않음
+        // 따라서 따로 함수로 update 될 때마다 state 관리
+        const index = blocks.map((block) => block.id).indexOf(updatedBlock.id);
+        const updatedBlocks = [...blocks];
+        updatedBlocks[index] = {
+            ...updatedBlocks[index],
+            tag : updatedBlock.tag,
+            html : updatedBlock.html
+        };
+        setBlocks(updatedBlocks);
+    }
+
     useEffect(() => {
         // blocks 생성 후 그 다음 블럭으로 커서를 옮김
         // setState에선 콜백함수로 바로 바꾸면 됐지만, react hooks 사용 시에는
@@ -39,6 +53,7 @@ const Editor = () => {
             deletedPrevBlockRef.current.focus();
             deletedPrevBlockRef.current = null;
         }
+        console.log(blocks);
     }, [blocks]);
 
     const addBlockHandler = (curBlock) => {
@@ -74,6 +89,7 @@ const Editor = () => {
                         id={block.id}
                         tag={block.tag}
                         html={block.html}
+                        updateEditor={updateEditorHandler}
                         addBlock={addBlockHandler}
                         deleteBlock={deleteBlockHandler}
                     />

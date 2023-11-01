@@ -1,20 +1,29 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContentEditable from "@/components/utility/content-editable";
 
-const EditableBlock = ({ id, tag, html, addBlock, deleteBlock }) => {
+const EditableBlock = ({
+    id,
+    tag,
+    html,
+    updateEditor,
+    addBlock,
+    deleteBlock,
+}) => {
     const ref = useRef(null);
-    const [content, setContent] = useState({ tag, html });
     const [htmlBackup, setHtmlBackup] = useState(null);
     const [prevKey, setPrevKey] = useState("");
 
     const onChangeHandler = (e) => {
-        // 입력 시 content에 담김
-        setContent({ ...content, html: e.target.value });
+        updateEditor({
+            id: id,
+            tag: tag,
+            html: e.target.value,
+        });
     };
 
     const onKeyDownHandler = (event) => {
         if (event.key === "/") {
-            setHtmlBackup(content.html);
+            setHtmlBackup(html);
         }
         if (event.key === "Enter") {
             if (prevKey !== "Shift") {
@@ -27,7 +36,7 @@ const EditableBlock = ({ id, tag, html, addBlock, deleteBlock }) => {
                 }
             }
         }
-        if (event.key === "Backspace" && content.html === "") {
+        if (event.key === "Backspace" && html === "") {
             // 빈 블럭에서 백스페이스 누르면 블럭 삭제
             event.preventDefault();
             deleteBlock({ id: id, ref: ref.current });
@@ -39,8 +48,8 @@ const EditableBlock = ({ id, tag, html, addBlock, deleteBlock }) => {
         <ContentEditable
             className="block"
             ref={ref}
-            tagName={content.tag}
-            html={content.html}
+            tagName={tag}
+            html={html}
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}
         />
