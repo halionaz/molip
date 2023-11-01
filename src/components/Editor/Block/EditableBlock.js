@@ -17,7 +17,6 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
     };
 
     const onKeyDownHandler = (event) => {
-        console.log(event.key);
         if (event.key === "/") {
             setHtmlBackup(content.html);
         }
@@ -25,8 +24,7 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
             if (prevKey !== "Shift") {
                 // Shift + Enter가 아니라면 새로운 블럭 생성
                 event.preventDefault();
-                addBlock({ id: id });
-                console.log("새로운 블럭 생성!");
+                addBlock({ id: id, ref: ref.current });
             }
         }
         setPrevKey(event.key);
@@ -35,7 +33,7 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
     return (
         <ContentEditable
             className="block"
-            innerRef={ref}
+            ref={ref}
             tagName={content.tag}
             html={content.html}
             onChange={onChangeHandler}
