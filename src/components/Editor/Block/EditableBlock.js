@@ -12,10 +12,6 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
         setContent({ ...content, html: e.target.value });
     };
 
-    const onBlurHandler = () => {
-        console.log(content);
-    };
-
     const onKeyDownHandler = (event) => {
         if (event.key === "/") {
             setHtmlBackup(content.html);
@@ -24,7 +20,11 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
             if (prevKey !== "Shift") {
                 // Shift + Enter가 아니라면 새로운 블럭 생성
                 event.preventDefault();
-                addBlock({ id: id, ref: ref.current });
+                if(!event.nativeEvent.isComposing){
+                    // 한글 입력 오류 방지
+                    // 한글은 조합되는 문자라 버그가 잦음
+                    addBlock({ id: id, ref: ref.current });
+                }
             }
         }
         setPrevKey(event.key);
@@ -37,7 +37,6 @@ const EditableBlock = ({ id, tag, html, addBlock }) => {
             tagName={content.tag}
             html={content.html}
             onChange={onChangeHandler}
-            onBlur={onBlurHandler}
             onKeyDown={onKeyDownHandler}
         />
     );
