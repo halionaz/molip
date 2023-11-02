@@ -9,6 +9,7 @@ import uid from "../utility/uid";
 // component import
 import style from "./Editor.module.css";
 import EditableBlock from "./Block/EditableBlock";
+import setCursorToEnd from "../utility/setCursorToEnd";
 
 // 첫 블럭
 const initialBlock = {
@@ -64,10 +65,9 @@ const Editor = () => {
             const index = blocks.map((block) => block.id).indexOf(curBlock.id);
             const updatedBlocks = [...blocks];
             // curBlock 삭제
-            console.log(blocks);
             updatedBlocks.splice(index, 1);
-            prevBlock.focus();
-            /* 커서를 prevBlock의 가장 마지막으로 옮겨주어야 함! */
+            // prevBlock의 맨 끝으로 타이핑 커서 옮김
+            setCursorToEnd(prevBlock);
             setBlocks(updatedBlocks);
         }
     };
