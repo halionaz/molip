@@ -41,6 +41,7 @@ const EditableBlock = ({
             event.preventDefault();
             deleteBlock({ id: id, ref: ref.current });
         }
+        // 키 조합을 확인하기 위해 prevKey 저장
         setPrevKey(event.key);
     };
 
