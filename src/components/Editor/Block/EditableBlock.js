@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ContentEditable from "@/components/utility/content-editable";
+import style from "./EditableBlock.module.css";
 
 const EditableBlock = ({
     id,
@@ -47,7 +48,7 @@ const EditableBlock = ({
 
     return (
         <ContentEditable
-            className="block"
+            className={`block ${style.block}`}
             ref={ref}
             tagName={tag}
             html={html}
