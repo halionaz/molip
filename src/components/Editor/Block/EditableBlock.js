@@ -37,7 +37,7 @@ const EditableBlock = ({
                 }
             }
         }
-        if (event.key === "Backspace" && html === "") {
+        if (event.key === "Backspace" && (html === "" || html === "<br>")) {
             // 빈 블럭에서 백스페이스 누르면 블럭 삭제
             event.preventDefault();
             deleteBlock({ id: id, ref: ref.current });

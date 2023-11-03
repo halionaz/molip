@@ -37,6 +37,7 @@ const Editor = () => {
     };
 
     useEffect(() => {
+        console.log(blocks);
         // blocks 생성 후 그 다음 블럭으로 커서를 옮김
         // setState에선 콜백함수로 바로 바꾸면 됐지만, react hooks 사용 시에는
         // ref를 통해 조건 체크 후 useEffect로 바꿔주어야 함
