@@ -12,7 +12,6 @@ const EditableBlock = ({
 }) => {
     const ref = useRef(null);
     const [htmlBackup, setHtmlBackup] = useState(null);
-    const [prevKey, setPrevKey] = useState("");
 
     const onChangeHandler = (e) => {
         updateEditor({
@@ -27,7 +26,7 @@ const EditableBlock = ({
             setHtmlBackup(html);
         }
         if (event.key === "Enter") {
-            if (prevKey !== "Shift") {
+            if(!event.shiftKey){
                 // Shift + Enter가 아니라면 새로운 블럭 생성
                 event.preventDefault();
                 if (!event.nativeEvent.isComposing) {
@@ -42,8 +41,6 @@ const EditableBlock = ({
             event.preventDefault();
             deleteBlock({ id: id, ref: ref.current });
         }
-        // 키 조합을 확인하기 위해 prevKey 저장
-        setPrevKey(event.key);
     };
 
     return (
