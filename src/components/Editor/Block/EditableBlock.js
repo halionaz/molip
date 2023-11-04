@@ -62,6 +62,7 @@ const EditableBlock = ({
         document.removeEventListener("click", closeSelectMenuHandler);
     };
     const applySelTagHandler = (newTag) => {
+        console.log(`${newTag}로 전환`)
         updateEditor({
             id: id,
             tag: newTag,

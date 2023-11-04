@@ -1,5 +1,5 @@
 import { matchSorter } from "match-sorter";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const HEIGHT = 150;
 const allowedTags = [
@@ -44,45 +44,46 @@ const SelectMenu = ({ position, onSelect, close }) => {
     }, []);
 
     useEffect(() => {
+        console.log(command);
         const items = matchSorter(allowedTags, command, { keys: ["tag"] });
         setItemsOption(items);
     }, [command]);
 
     const onKeyDown = (event) => {
-        switch (event.key) {
-            case "Enter":
-                event.preventDefault();
-                onSelect(itemsOption[selectedItem].tag);
-                break;
-            case "Backspace":
-                if (!command) {
+        // 중요. addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
+        // 따라서 setState 내에서 prev를 체크하는 편법을 사용함
+        const curKey = event.key;
+
+        if (curKey === "Enter") {
+            event.preventDefault();
+            onSelect(itemsOption[selectedItem].tag);
+        } else if (curKey === "Backspace") {
+            setCommand((prev) => {
+                if (prev === "") {
                     // 검색하고 있던 command가 없다면 셀렉메뉴 창 닫기
                     close();
+                    return prev;
                 }
                 // 검색하던 command가 있다면 검색어에서 하나 지움
-                setCommand(command.substring(0, command.length - 1));
-                break;
-            case "ArrowUp":
-                /*
-                구현 필요
-                */
-                event.preventDefault();
-                break;
-            case "ArrowDown":
-            case "Tab":
-                /*
-                구현 필요
-                */
-                event.preventDefault();
-                break;
-            default:
-                setCommand((prev) => prev + event.key);
-                break;
+                return prev.substring(0, prev.length - 1);
+            });
+        } else if (curKey === "ArrowUp") {
+            /*
+            구현 필요
+            */
+            event.preventDefault();
+        } else if (curKey === "ArrowDown" || curKey === "Tab") {
+            /*
+            구현 필요
+            */
+            event.preventDefault();
+        } else if (curKey) {
+            setCommand((prev) => prev + curKey);
         }
     };
 
     return (
-        <div className="SelectMenu" style={{ top: y, left: x }}>
+        <div className="SelectMenu" style={{ top: `${y}`, left: `${x}` }}>
             <div className="Items">
                 {itemsOption.map((item, key) => {
                     const isSelected =
