@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContentEditable from "@/components/utility/content-editable";
 import style from "./EditableBlock.module.css";
 import SelectMenu from "./SelectMenu";
 import getSelMenuCoordinates from "@/components/utility/getSelMenuCoordinates";
+import setCursorToEnd from "@/components/utility/setCursorToEnd";
 
 const EditableBlock = ({
     id,
@@ -55,12 +56,14 @@ const EditableBlock = ({
         setSelectMenuPos(pos);
         document.addEventListener("click", closeSelectMenuHandler);
     };
+
     const closeSelectMenuHandler = () => {
         setHtmlBackup(null);
         setIsSelectMenuOpen(false);
         setSelectMenuPos({ x: null, y: null });
         document.removeEventListener("click", closeSelectMenuHandler);
     };
+
     const applySelTagHandler = (newTag) => {
         console.log(`${newTag}로 전환`)
         updateEditor({
@@ -68,6 +71,10 @@ const EditableBlock = ({
             tag: newTag,
             html: htmlBackup,
         });
+        /*
+        버그 fix 필요
+        setCursorToEnd(ref.current);
+        */
         closeSelectMenuHandler();
     };
 
