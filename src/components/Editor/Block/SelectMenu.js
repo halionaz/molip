@@ -44,13 +44,12 @@ const SelectMenu = ({ position, onSelect, close }) => {
     }, []);
 
     useEffect(() => {
-        console.log(command);
         const items = matchSorter(allowedTags, command, { keys: ["tag"] });
         setItemsOption(items);
     }, [command]);
 
     const onKeyDown = (event) => {
-        // 중요. addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
+        // ⭐️ 중요! addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
         // 따라서 setState 내에서 prev를 체크하는 편법을 사용함
         const curKey = event.key;
 
