@@ -11,12 +11,12 @@ const EditableBlock = ({
     html,
     updateEditor,
     addBlock,
-    deleteBlock,
+    deleteBlock
 }) => {
-    const ref = useRef(null);
     const [htmlBackup, setHtmlBackup] = useState(null);
     const [isSelectMenuOpen, setIsSelectMenuOpen] = useState(false);
     const [selectMenuPos, setSelectMenuPos] = useState({ x: null, y: null });
+    const ref = useRef(null);
 
     const onChangeHandler = (e) => {
         updateEditor({
@@ -67,16 +67,15 @@ const EditableBlock = ({
     };
 
     const applySelTagHandler = (newTag) => {
-        console.log(`${newTag}로 전환`);
-        updateEditor({
-            id: id,
-            tag: newTag,
-            html: htmlBackup,
-        });
-        /*
-        버그 fix 필요
+        updateEditor(
+            {
+                id: id,
+                tag: newTag,
+                html: htmlBackup,
+            }
+        );
+        console.log("포커스 현 블럭으로 옮겨주기")
         setCursorToEnd(ref.current);
-        */
         closeSelectMenuHandler();
     };
 
@@ -91,11 +90,11 @@ const EditableBlock = ({
             )}
             <ContentEditable
                 className={`block ${style.block}`}
-                ref={ref}
                 tagName={tag}
                 html={html}
                 onChange={onChangeHandler}
                 onKeyDown={onKeyDownHandler}
+                ref={ref}
             />
         </>
     );

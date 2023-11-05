@@ -41,9 +41,11 @@ const Editor = () => {
         // blocks 생성 후 그 다음 블럭으로 커서를 옮김
         // setState에선 콜백함수로 바로 바꾸면 됐지만, react hooks 사용 시에는
         // ref를 통해 조건 체크 후 useEffect로 바꿔주어야 함
+        console.log(blocks);
         if (newBlockRef.current !== null) {
             // blocks가 바뀌었고, 다음 블럭이 추가된 경우라면
             // 포커스 옮겨주기
+            console.log("포커스 다음 블럭으로 옮겨주기");
             newBlockRef.current.nextElementSibling.focus();
             newBlockRef.current = null;
         }
@@ -68,6 +70,7 @@ const Editor = () => {
             // curBlock 삭제
             updatedBlocks.splice(index, 1);
             // prevBlock의 맨 끝으로 타이핑 커서 옮김
+            console.log("포커스 이전 블럭으로 옮겨주기");
             setCursorToEnd(prevBlock);
             setBlocks(updatedBlocks);
         }

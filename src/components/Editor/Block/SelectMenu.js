@@ -1,5 +1,5 @@
 import { matchSorter } from "match-sorter";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import style from "./SelectMenu.module.css";
 
 const HEIGHT = 150;
@@ -45,7 +45,7 @@ const SelectMenu = ({ position, onSelect, close }) => {
             // 이 메뉴가 없어질 때 Event Listener 없앰
             document.removeEventListener("keydown", onKeyDown);
         };
-    }, []);
+    }, [onkeydown]);
 
     useEffect(() => {
         const items = matchSorter(allowedTags, command, { keys: ["tag"] });
@@ -55,16 +55,12 @@ const SelectMenu = ({ position, onSelect, close }) => {
     }, [command]);
 
     useEffect(() => {
-        console.log(selection.selectedItem);
-    }, [selection]);
-
-    useEffect(() => {
         if (checkClose) {
             close();
         }
     }, [checkClose]);
 
-    const onKeyDown = (event) => {
+    const onKeyDown = useCallback((event) => {
         // ⭐️ 중요! addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
         // 따라서 setState 내에서 prev를 체크하는 편법을 사용함
         const curKey = event.key;
@@ -123,7 +119,7 @@ const SelectMenu = ({ position, onSelect, close }) => {
                 setCommand((prev) => prev + curKey);
                 break;
         }
-    };
+    }, []);
 
     return (
         <div className="SelectMenu" style={{ top: `${y}`, left: `${x}` }}>
