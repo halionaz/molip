@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import uid from "../utility/uid";
 
 // component import
+import "./EditorStyle.css";
 import style from "./Editor.module.css";
 import EditableBlock from "./Block/EditableBlock";
 import setCursorToEnd from "../utility/setCursorToEnd";
