@@ -7,22 +7,22 @@ const allowedTags = [
     {
         id: "page-title",
         tag: "h1",
-        label: "Page Title",
+        label: "제목 1",
     },
     {
         id: "heading",
         tag: "h2",
-        label: "Heading",
+        label: "제목 2",
     },
     {
         id: "subheading",
         tag: "h3",
-        label: "Subheading",
+        label: "제목 3",
     },
     {
         id: "paragraph",
         tag: "p",
-        label: "Paragraph",
+        label: "텍스트",
     },
 ];
 
