@@ -1,5 +1,6 @@
 import { matchSorter } from "match-sorter";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import style from "./SelectMenu.module.css";
 
 const HEIGHT = 150;
 const allowedTags = [
@@ -48,36 +49,61 @@ const SelectMenu = ({ position, onSelect, close }) => {
         setItemsOption(items);
     }, [command]);
 
+    useEffect(()=>{
+        console.log(selectedItem);
+    }, [selectedItem]);
+
     const onKeyDown = (event) => {
         // ⭐️ 중요! addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
         // 따라서 setState 내에서 prev를 체크하는 편법을 사용함
         const curKey = event.key;
 
-        if (curKey === "Enter") {
-            event.preventDefault();
-            onSelect(itemsOption[selectedItem].tag);
-        } else if (curKey === "Backspace") {
-            setCommand((prev) => {
-                if (prev === "") {
-                    // 검색하고 있던 command가 없다면 셀렉메뉴 창 닫기
-                    close();
-                    return prev;
-                }
-                // 검색하던 command가 있다면 검색어에서 하나 지움
-                return prev.substring(0, prev.length - 1);
-            });
-        } else if (curKey === "ArrowUp") {
-            /*
-            구현 필요
-            */
-            event.preventDefault();
-        } else if (curKey === "ArrowDown" || curKey === "Tab") {
-            /*
-            구현 필요
-            */
-            event.preventDefault();
-        } else if (curKey) {
-            setCommand((prev) => prev + curKey);
+        switch (event.key) {
+            case "Enter":
+                event.preventDefault();
+                setItemsOption((IO) => {
+                    setSelectedItem((SI)=>{
+                        onSelect(IO[SI].tag);
+                        return SI
+                    })
+                    return IO;
+                });
+                break;
+            case "Backspace":
+                setCommand((prev) => {
+                    if (prev === "") {
+                        // 검색하고 있던 command가 없다면 셀렉메뉴 창 닫기
+                        close();
+                        return prev;
+                    }
+                    // 검색하던 command가 있다면 검색어에서 하나 지움
+                    return prev.substring(0, prev.length - 1);
+                });
+                break;
+            case "ArrowUp":
+                event.preventDefault();
+                setItemsOption((IO) => {
+                    setSelectedItem((SI)=>{
+                        const prevSel = SI === 0 ? IO.length - 1 : SI - 1;
+                        return prevSel;
+                    })
+                    return IO;
+                });
+                break;
+            case "ArrowDown":
+            case "Tab":
+                event.preventDefault();
+                setItemsOption((IO) => {
+                    setSelectedItem((SI)=>{
+                        const nextSel = SI === IO.length - 1 ? 0 : SI + 1;
+                        return nextSel;
+                    })
+                    return IO;
+                });
+                break;
+            default:
+                setCommand((prev) => prev + curKey);
+                break;
         }
     };
 
@@ -89,7 +115,7 @@ const SelectMenu = ({ position, onSelect, close }) => {
                         itemsOption.indexOf(item) === selectedItem;
                     return (
                         <div
-                            className={isSelected ? "selected" : null}
+                            className={isSelected ? style.selected : null}
                             key={key}
                             tabIndex="0"
                             onClick={() => {
