@@ -42,10 +42,12 @@ const EditableBlock = ({
                 }
             }
         }
-        if (event.key === "Backspace" && (html === "" || html === "<br>")) {
-            // 빈 블럭에서 백스페이스 누르면 블럭 삭제
-            event.preventDefault();
-            deleteBlock({ id: id, ref: ref.current });
+        if (event.key === "Backspace") {
+            if (html === "" || html === "<br>") {
+                // 빈 블럭에서 백스페이스 누르면 블럭 삭제
+                event.preventDefault();
+                deleteBlock({ id: id, ref: ref.current });
+            }
         }
     };
 
@@ -65,7 +67,7 @@ const EditableBlock = ({
     };
 
     const applySelTagHandler = (newTag) => {
-        console.log(`${newTag}로 전환`)
+        console.log(`${newTag}로 전환`);
         updateEditor({
             id: id,
             tag: newTag,

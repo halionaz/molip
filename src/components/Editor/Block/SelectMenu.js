@@ -30,9 +30,12 @@ const SelectMenu = ({ position, onSelect, close }) => {
     const x = position.x;
     const y = position.y - HEIGHT;
 
-    const [selectedItem, setSelectedItem] = useState(0);
+    const [selection, setSelection] = useState({
+        itemsOption: allowedTags,
+        selectedItem: 0,
+    });
     const [command, setCommand] = useState("");
-    const [itemsOption, setItemsOption] = useState(allowedTags);
+    const [checkClose, setCheckClose] = useState(false);
 
     useEffect(() => {
         // 처음에 Event Listener 추가
@@ -46,12 +49,20 @@ const SelectMenu = ({ position, onSelect, close }) => {
 
     useEffect(() => {
         const items = matchSorter(allowedTags, command, { keys: ["tag"] });
-        setItemsOption(items);
+        setSelection((prev) => {
+            return { ...prev, itemsOption: items };
+        });
     }, [command]);
 
-    useEffect(()=>{
-        console.log(selectedItem);
-    }, [selectedItem]);
+    useEffect(() => {
+        console.log(selection.selectedItem);
+    }, [selection]);
+
+    useEffect(() => {
+        if (checkClose) {
+            close();
+        }
+    }, [checkClose]);
 
     const onKeyDown = (event) => {
         // ⭐️ 중요! addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
@@ -61,19 +72,20 @@ const SelectMenu = ({ position, onSelect, close }) => {
         switch (event.key) {
             case "Enter":
                 event.preventDefault();
-                setItemsOption((IO) => {
-                    setSelectedItem((SI)=>{
-                        onSelect(IO[SI].tag);
-                        return SI
-                    })
-                    return IO;
+                setSelection((prev) => {
+                    onSelect(prev.itemsOption[prev.selectedItem].tag);
+                    return prev;
                 });
                 break;
             case "Backspace":
                 setCommand((prev) => {
                     if (prev === "") {
                         // 검색하고 있던 command가 없다면 셀렉메뉴 창 닫기
-                        close();
+                        event.preventDefault();
+                        // 원래 바로 close()를 쓰려 했는데, 다른 component의 state들이 동시에 실행되는 현상이 생겨버려
+                        // Warning이 뿜어져 나옴
+                        // 따라서 state로 close() 실행하는 식으로 관리
+                        setCheckClose(true);
                         return prev;
                     }
                     // 검색하던 command가 있다면 검색어에서 하나 지움
@@ -82,23 +94,29 @@ const SelectMenu = ({ position, onSelect, close }) => {
                 break;
             case "ArrowUp":
                 event.preventDefault();
-                setItemsOption((IO) => {
-                    setSelectedItem((SI)=>{
-                        const prevSel = SI === 0 ? IO.length - 1 : SI - 1;
-                        return prevSel;
-                    })
-                    return IO;
+                setSelection((prev) => {
+                    const newSel =
+                        prev.selectedItem === 0
+                            ? prev.itemsOption.length - 1
+                            : prev.selectedItem - 1;
+                    return {
+                        ...prev,
+                        selectedItem: newSel,
+                    };
                 });
                 break;
             case "ArrowDown":
             case "Tab":
                 event.preventDefault();
-                setItemsOption((IO) => {
-                    setSelectedItem((SI)=>{
-                        const nextSel = SI === IO.length - 1 ? 0 : SI + 1;
-                        return nextSel;
-                    })
-                    return IO;
+                setSelection((prev) => {
+                    const newSel =
+                        prev.selectedItem === prev.itemsOption.length - 1
+                            ? 0
+                            : prev.selectedItem + 1;
+                    return {
+                        ...prev,
+                        selectedItem: newSel,
+                    };
                 });
                 break;
             default:
@@ -110,9 +128,10 @@ const SelectMenu = ({ position, onSelect, close }) => {
     return (
         <div className="SelectMenu" style={{ top: `${y}`, left: `${x}` }}>
             <div className="Items">
-                {itemsOption.map((item, key) => {
+                {selection.itemsOption.map((item, key) => {
                     const isSelected =
-                        itemsOption.indexOf(item) === selectedItem;
+                        selection.itemsOption.indexOf(item) ===
+                        selection.selectedItem;
                     return (
                         <div
                             className={isSelected ? style.selected : null}
