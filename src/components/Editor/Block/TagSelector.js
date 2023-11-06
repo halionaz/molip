@@ -1,6 +1,6 @@
 import { matchSorter } from "match-sorter";
-import { useCallback, useEffect, useState } from "react";
-import style from "./SelectMenu.module.css";
+import { useEffect, useState } from "react";
+import styles from "./SelectMenu.module.css";
 
 const HEIGHT = 150;
 const allowedTags = [
@@ -27,17 +27,62 @@ const allowedTags = [
 ];
 
 const TagSelector = ({ position, onSelect, close }) => {
+    const isMenuOutsideOfTop = position.y - HEIGHT < 0;
     const x = position.x;
-    const y = position.y - HEIGHT;
+    const y = isMenuOutsideOfTop
+        ? position.y + HEIGHT / 3
+        : position.y - HEIGHT;
 
-    const [selection, setSelection] = useState({
-        itemsOption: allowedTags,
-        selectedItem: 0,
-    });
-    const [command, setCommand] = useState("");
+    const [tagList, setTagList] = useState(allowedTags);
+    const [selectedInd, setSelectedInd] = useState(0);
+    const [inp, setInp] = useState("");
     const [checkClose, setCheckClose] = useState(false);
 
     useEffect(() => {
+        setTagList(matchSorter(allowedTags, inp, { keys: ["tag"] }));
+    }, [inp]);
+
+    useEffect(() => {
+        const onKeyDown = (event) => {
+            switch (event.key) {
+                case "Enter":
+                    event.preventDefault();
+                    onSelect(tagList[selectedInd].tag);
+                    break;
+                case "Backspace":
+                    if (inp) {
+                        setInp((prev) => {
+                            return prev.substring(0, prev.length - 1);
+                        });
+                    } else {
+                        // 검색하고 있던 input이 없다면 셀렉 메뉴 창 닫기
+                        event.preventDefault();
+                        close();
+                    }
+                    break;
+                case "ArrowUp":
+                    event.preventDefault();
+                    const prevSel =
+                        selectedInd === 0
+                            ? tagList.length - 1
+                            : selectedInd - 1;
+                    setSelectedInd(prevSel);
+                    break;
+                case "ArrowDown":
+                case "Tab":
+                    event.preventDefault();
+                    const nextSel =
+                        selectedInd === tagList.length - 1
+                            ? 0
+                            : selectedInd + 1;
+                    setSelectedInd(nextSel);
+                    break;
+                default:
+                    setInp((prev) => prev + event.key);
+                    break;
+            }
+        };
+
         // 처음에 Event Listener 추가
         document.addEventListener("keydown", onKeyDown);
         return () => {
@@ -45,93 +90,24 @@ const TagSelector = ({ position, onSelect, close }) => {
             // 이 메뉴가 없어질 때 Event Listener 없앰
             document.removeEventListener("keydown", onKeyDown);
         };
-    }, [onkeydown]);
-
-    useEffect(() => {
-        const items = matchSorter(allowedTags, command, { keys: ["tag"] });
-        setSelection((prev) => {
-            return { ...prev, itemsOption: items };
-        });
-    }, [command]);
-
-    useEffect(() => {
-        if (checkClose) {
-            close();
-        }
-    }, [checkClose]);
-
-    const onKeyDown = useCallback((event) => {
-        // ⭐️ 중요! addEventListner를 통해 등록한 함수에서는 state값을 못 읽는다.
-        // 따라서 setState 내에서 prev를 체크하는 편법을 사용함
-        const curKey = event.key;
-
-        switch (event.key) {
-            case "Enter":
-                event.preventDefault();
-                setSelection((prev) => {
-                    onSelect(prev.itemsOption[prev.selectedItem].tag);
-                    return prev;
-                });
-                break;
-            case "Backspace":
-                setCommand((prev) => {
-                    if (prev === "") {
-                        // 검색하고 있던 command가 없다면 셀렉메뉴 창 닫기
-                        event.preventDefault();
-                        // 원래 바로 close()를 쓰려 했는데, 다른 component의 state들이 동시에 실행되는 현상이 생겨버려
-                        // Warning이 뿜어져 나옴
-                        // 따라서 state로 close() 실행하는 식으로 관리
-                        setCheckClose(true);
-                        return prev;
-                    }
-                    // 검색하던 command가 있다면 검색어에서 하나 지움
-                    return prev.substring(0, prev.length - 1);
-                });
-                break;
-            case "ArrowUp":
-                event.preventDefault();
-                setSelection((prev) => {
-                    const newSel =
-                        prev.selectedItem === 0
-                            ? prev.itemsOption.length - 1
-                            : prev.selectedItem - 1;
-                    return {
-                        ...prev,
-                        selectedItem: newSel,
-                    };
-                });
-                break;
-            case "ArrowDown":
-            case "Tab":
-                event.preventDefault();
-                setSelection((prev) => {
-                    const newSel =
-                        prev.selectedItem === prev.itemsOption.length - 1
-                            ? 0
-                            : prev.selectedItem + 1;
-                    return {
-                        ...prev,
-                        selectedItem: newSel,
-                    };
-                });
-                break;
-            default:
-                setCommand((prev) => prev + curKey);
-                break;
-        }
-    }, []);
+    }, [tagList, selectedInd]);
 
     return (
-        <div className="SelectMenu" style={{ top: `${y}`, left: `${x}` }}>
+        <div
+            className="SelectMenu"
+            style={{
+                top: `${y}`,
+                left: `${x}`,
+                justifyContent: !isMenuOutsideOfTop ? "flex-end" : "flex-start",
+            }}
+        >
             <div className="Items">
-                {selection.itemsOption.map((item, key) => {
-                    const isSelected =
-                        selection.itemsOption.indexOf(item) ===
-                        selection.selectedItem;
+                {tagList.map((item, key) => {
+                    const isSelected = tagList.indexOf(item) === selectedInd;
                     return (
                         <div
-                            className={isSelected ? style.selected : null}
                             key={key}
+                            className={isSelected ? styles.selected : null}
                             tabIndex="0"
                             onClick={() => {
                                 onSelect(item.tag);
