@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+
 import ContentEditable from "@/components/utility/content-editable";
-import style from "./EditableBlock.module.css";
-import SelectMenu from "./SelectMenu";
-import getSelMenuCoordinates from "@/components/utility/getSelMenuCoordinates";
-import setCursorToEnd from "@/components/utility/setCursorToEnd";
+
+import styles from "./EditableBlock.module.css";
+import TagSelector from "./TagSelector";
+
+import setCaretToEnd from "@/components/utility/setCaretToEnd";
+import getSelectorCoord from "@/components/utility/getSelectorCoord";
 
 const EditableBlock = ({
     id,
@@ -11,34 +14,36 @@ const EditableBlock = ({
     html,
     updateEditor,
     addBlock,
-    deleteBlock
+    deleteBlock,
+    position
 }) => {
-    const [htmlBackup, setHtmlBackup] = useState(null);
-    const [isSelectMenuOpen, setIsSelectMenuOpen] = useState(false);
-    const [selectMenuPos, setSelectMenuPos] = useState({ x: null, y: null });
-    const ref = useRef(null);
+    const blockRef = useRef(null);
 
-    const onChangeHandler = (e) => {
+    const [htmlBackup, setHtmlBackup] = useState(null);
+    const [isTagSelectorOpen, setIsTagSelectorOpen] = useState(false);
+    const [tagSelectorPos, setTagSelectorPos] = useState({ x: null, y: null });
+
+    const onChange = (event) => {
         updateEditor({
             id: id,
             tag: tag,
-            html: e.target.value,
+            html: event.target.value,
         });
     };
 
-    const onKeyDownHandler = (event) => {
+    const onKeyDown = (event) => {
         if (event.key === "/") {
             setHtmlBackup(html);
-            openSelectMenuHandler();
         }
         if (event.key === "Enter") {
-            if (!event.shiftKey) {
-                // Shift + Enter가 아니라면 새로운 블럭 생성
+            if (!event.shiftKey && !isTagSelectorOpen) {
+                // Shift + Enter가 아니고, 태그 셀렉터가 오픈되어 있는 경우가 아니라면
+                // 새로운 블럭 생성
                 event.preventDefault();
                 if (!event.nativeEvent.isComposing) {
                     // 한글 입력 오류 방지
                     // 한글은 조합되는 문자라 버그가 잦음
-                    addBlock({ id: id, ref: ref.current });
+                    addBlock({ id: id, ref: blockRef.current });
                 }
             }
         }
@@ -46,27 +51,33 @@ const EditableBlock = ({
             if (html === "" || html === "<br>") {
                 // 빈 블럭에서 백스페이스 누르면 블럭 삭제
                 event.preventDefault();
-                deleteBlock({ id: id, ref: ref.current });
+                deleteBlock({ id: id, ref: blockRef.current });
             }
         }
     };
 
-    const openSelectMenuHandler = () => {
-        setIsSelectMenuOpen(true);
+    const onKeyUp = (event) => {
+        if(event.key === "/"){
+            openTagSelector();
+        }
+    }
+
+    const openTagSelector = () => {
+        setIsTagSelectorOpen(true);
         // 좌표값 잡기
-        const pos = getSelMenuCoordinates();
-        setSelectMenuPos(pos);
-        document.addEventListener("click", closeSelectMenuHandler);
+        const pos = getSelectorCoord();
+        setTagSelectorPos(pos);
+        document.addEventListener("click", closeTagSelector);
     };
 
-    const closeSelectMenuHandler = () => {
+    const closeTagSelector = () => {
         setHtmlBackup(null);
-        setIsSelectMenuOpen(false);
-        setSelectMenuPos({ x: null, y: null });
-        document.removeEventListener("click", closeSelectMenuHandler);
+        setTagSelectorPos({ x: null, y: null });
+        setIsTagSelectorOpen(false);
+        document.removeEventListener("click", closeTagSelector);
     };
 
-    const applySelTagHandler = (newTag) => {
+    const applyTag = (newTag) => {
         updateEditor(
             {
                 id: id,
@@ -75,26 +86,28 @@ const EditableBlock = ({
             }
         );
         console.log("포커스 현 블럭으로 옮겨주기")
-        setCursorToEnd(ref.current);
-        closeSelectMenuHandler();
+        setCaretToEnd(blockRef.current);
+        closeTagSelector();
     };
 
     return (
         <>
-            {isSelectMenuOpen && (
-                <SelectMenu
-                    position={selectMenuPos}
-                    onSelect={applySelTagHandler}
-                    close={closeSelectMenuHandler}
+            {isTagSelectorOpen && (
+                <TagSelector
+                    position={tagSelectorPos}
+                    close={closeTagSelector}
+                    onSelect={applyTag}
                 />
             )}
             <ContentEditable
-                className={`block ${style.block}`}
+                ref={blockRef}
+                data-position={position}
                 tagName={tag}
                 html={html}
-                onChange={onChangeHandler}
-                onKeyDown={onKeyDownHandler}
-                ref={ref}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                onKeyUp={onKeyUp}
+                className={`block ${styles.block}`}
             />
         </>
     );
