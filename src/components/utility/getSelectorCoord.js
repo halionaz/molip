@@ -1,4 +1,4 @@
-const getSelMenuCoordinates = () => {
+const getSelectorCoord = () => {
     let x, y;
     const selection = window.getSelection();
     if (selection.rangeCount !== 0) {
@@ -13,4 +13,4 @@ const getSelMenuCoordinates = () => {
     return { x, y };
 };
 
-export default getSelMenuCoordinates;
+export default getSelectorCoord;

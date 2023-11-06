@@ -1,4 +1,4 @@
-const setCursorToEnd = (element) => {
+const setCaretToEnd = (element) => {
 
     const range = document.createRange();
     const sel = window.getSelection();
@@ -10,4 +10,4 @@ const setCursorToEnd = (element) => {
     sel.addRange(range);
 };
 
-export default setCursorToEnd;
+export default setCaretToEnd;

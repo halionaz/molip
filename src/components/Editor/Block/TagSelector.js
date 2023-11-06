@@ -26,7 +26,7 @@ const allowedTags = [
     },
 ];
 
-const SelectMenu = ({ position, onSelect, close }) => {
+const TagSelector = ({ position, onSelect, close }) => {
     const x = position.x;
     const y = position.y - HEIGHT;
 
@@ -146,4 +146,4 @@ const SelectMenu = ({ position, onSelect, close }) => {
     );
 };
 
-export default SelectMenu;
+export default TagSelector;
