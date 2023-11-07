@@ -42,10 +42,16 @@ const TagSelector = ({ position, onSelect, close }) => {
     }, [inp]);
 
     useEffect(() => {
+        // onKeyDown을 useEffect 밖으로 빼는 식으로 설계할 수 있으나,
+        // eventListner에 등록한 함수에서 state를 만지고 싶다면
+        // 이런식으로 넣어서 설계해야 함.
+        // 그렇지 않으면 이전 코드처럼 번거롭게 setState 내에서 state를 조회하는 편법을 써야 함
+
         const onKeyDown = (event) => {
             switch (event.key) {
                 case "Enter":
                     event.preventDefault();
+                    console.log(tagList[selectedInd].tag);
                     onSelect(tagList[selectedInd].tag);
                     break;
                 case "Backspace":
@@ -90,6 +96,7 @@ const TagSelector = ({ position, onSelect, close }) => {
             document.removeEventListener("keydown", onKeyDown);
         };
     }, [tagList, selectedInd]);
+
 
     return (
         <div

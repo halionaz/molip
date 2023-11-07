@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import ContentEditable from "@/components/utility/content-editable";
 
 import styles from "./EditableBlock.module.css";
 import TagSelector from "./TagSelector";
 
-import setCaretToEnd from "@/components/utility/setCaretToEnd";
 import getSelectorCoord from "@/components/utility/getSelectorCoord";
 
 const EditableBlock = ({

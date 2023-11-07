@@ -26,11 +26,7 @@ const Editor = () => {
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const prevBlocks = usePrevious(blocks);
-
-    // useEffect(()=>{
-    //     console.log(blocks);
-    // },[blocks])
-
+    
     useEffect(()=> {
         // cursor 옮기기 관리
         if(prevBlocks && prevBlocks.length + 1 === blocks.length){
