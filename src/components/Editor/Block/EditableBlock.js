@@ -15,7 +15,8 @@ const EditableBlock = ({
     updateEditor,
     addBlock,
     deleteBlock,
-    position
+    position,
+    setCaretToTagChangedBlock
 }) => {
     const blockRef = useRef(null);
 
@@ -85,9 +86,8 @@ const EditableBlock = ({
                 html: htmlBackup,
             }
         );
-        console.log("포커스 현 블럭으로 옮겨주기")
-        setCaretToEnd(blockRef.current);
         closeTagSelector();
+        setCaretToTagChangedBlock(id);
     };
 
     return (

@@ -36,7 +36,6 @@ const TagSelector = ({ position, onSelect, close }) => {
     const [tagList, setTagList] = useState(allowedTags);
     const [selectedInd, setSelectedInd] = useState(0);
     const [inp, setInp] = useState("");
-    const [checkClose, setCheckClose] = useState(false);
 
     useEffect(() => {
         setTagList(matchSorter(allowedTags, inp, { keys: ["tag"] }));

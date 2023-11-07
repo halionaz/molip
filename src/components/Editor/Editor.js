@@ -24,7 +24,12 @@ const Editor = () => {
     // 현재 에디터에 있는 블럭들을 저장하는 state
     const [blocks, setBlocks] = useState([initialBlock]);
     const [curBlockID, setCurBlockID] = useState(null);
+    const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const prevBlocks = usePrevious(blocks);
+
+    // useEffect(()=>{
+    //     console.log(blocks);
+    // },[blocks])
 
     useEffect(()=> {
         // cursor 옮기기 관리
@@ -45,6 +50,20 @@ const Editor = () => {
             }
         }
     }, [blocks, prevBlocks, curBlockID]);
+
+    useEffect(()=>{
+        if(prevBlocks && tagUpdatedBlockID){
+            const prevBlockPos = prevBlocks.map((block)=>block.id).indexOf(tagUpdatedBlockID);
+            const updatedBlockPos = blocks.map((block)=>block.id).indexOf(tagUpdatedBlockID);
+            if(prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag){
+                // tag가 바뀌었다면
+                const updatedBlockDOM = document.querySelector(`[data-position="${updatedBlockPos + 1}"]`);
+                if(updatedBlockDOM){
+                    setCaretToEnd(updatedBlockDOM);
+                }
+            }
+        }
+    }, [blocks, prevBlocks, tagUpdatedBlockID]);
 
     const updateEditorHandler = (updatedBlock) => {
         // blocks state의 변경들을 관리하는 함수
@@ -81,19 +100,27 @@ const Editor = () => {
         }
     };
 
+    const setCaretToTagChangedBlock = (updatedBlockID) => {
+        // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
+        // id 저장
+        setTagUpdatedBlockID(updatedBlockID);
+    }
+
     return (
         <div className={style.editor}>
             {blocks.map((block, key) => {
+                const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
                 return (
                     <EditableBlock
                         key={key}
-                        position={key+1}
+                        position={pos}
                         id={block.id}
                         tag={block.tag}
                         html={block.html}
                         addBlock={addBlockHandler}
                         deleteBlock={deleteBlockHandler}
                         updateEditor={updateEditorHandler}
+                        setCaretToTagChangedBlock={setCaretToTagChangedBlock}
                     />
                 );
             })}
