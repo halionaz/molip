@@ -7,8 +7,7 @@ import { useEffect, useState } from "react";
 import uid from "../utility/uid";
 
 // component import
-import "./EditorStyle.css";
-import style from "./Editor.module.css";
+import styles from "./Editor.module.css";
 import EditableBlock from "./Block/EditableBlock";
 import setCaretToEnd from "../utility/setCaretToEnd";
 import usePrevious from "../utility/usePrevious";
@@ -103,7 +102,7 @@ const Editor = () => {
     }
 
     return (
-        <div className={style.editor}>
+        <div className={styles.editor}>
             {blocks.map((block, key) => {
                 const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
                 return (

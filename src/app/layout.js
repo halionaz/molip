@@ -10,7 +10,6 @@ export default function RootLayout({ children }) {
     return (
         <html>
             <body>
-                <h1 className="logo">mol.ip</h1>
                 {children}
             </body>
         </html>

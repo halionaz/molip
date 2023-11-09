@@ -1,3 +1,17 @@
 .editor{
     margin: 10px;
 }
+
+/* 사용자가 쓰게 되는 문서의 CSS 속성 */
+.editor h1{
+    font-weight: 800;
+    font-size: 200%;
+}
+.editor h2{
+    font-weight: 700;
+    font-size: 160%;
+}
+.editor h3{
+    font-weight: 600;
+    font-size: 120%;
+}
