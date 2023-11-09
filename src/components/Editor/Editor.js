@@ -25,35 +25,48 @@ const Editor = () => {
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const prevBlocks = usePrevious(blocks);
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         // cursor 옮기기 관리
-        if(prevBlocks && prevBlocks.length + 1 === blocks.length){
+        if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
             // 블럭이 추가됨
-            const nextBlockPos = blocks.map((block)=>block.id).indexOf(curBlockID) + 2;
-            const nextBlockDOM = document.querySelector(`[data-position="${nextBlockPos}"]`);
-            if(nextBlockDOM){
+            const nextBlockPos =
+                blocks.map((block) => block.id).indexOf(curBlockID) + 2;
+            const nextBlockDOM = document.querySelector(
+                `[data-position="${nextBlockPos}"]`
+            );
+            if (nextBlockDOM) {
                 nextBlockDOM.focus();
             }
         }
-        if(prevBlocks && prevBlocks.length - 1 === blocks.length){
+        if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
             // 블럭이 삭제됨
-            const prevBlockPos = prevBlocks.map((block) => block.id).indexOf(curBlockID);
-            const prevBlockDOM = document.querySelector(`[data-position="${prevBlockPos}"]`);
-            if(prevBlockDOM){
+            const prevBlockPos = prevBlocks
+                .map((block) => block.id)
+                .indexOf(curBlockID);
+            const prevBlockDOM = document.querySelector(
+                `[data-position="${prevBlockPos}"]`
+            );
+            if (prevBlockDOM) {
                 setCaretToEnd(prevBlockDOM);
             }
         }
     }, [blocks, prevBlocks, curBlockID]);
 
-    useEffect(()=>{
-        if(prevBlocks && tagUpdatedBlockID){
-            const prevBlockPos = prevBlocks.map((block)=>block.id).indexOf(tagUpdatedBlockID);
-            const updatedBlockPos = blocks.map((block)=>block.id).indexOf(tagUpdatedBlockID);
-            if(prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag){
+    useEffect(() => {
+        if (prevBlocks && tagUpdatedBlockID) {
+            const prevBlockPos = prevBlocks
+                .map((block) => block.id)
+                .indexOf(tagUpdatedBlockID);
+            const updatedBlockPos = blocks
+                .map((block) => block.id)
+                .indexOf(tagUpdatedBlockID);
+            if (prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag) {
                 // tag가 바뀌었다면
-                const updatedBlockDOM = document.querySelector(`[data-position="${updatedBlockPos + 1}"]`);
-                if(updatedBlockDOM){
+                const updatedBlockDOM = document.querySelector(
+                    `[data-position="${updatedBlockPos + 1}"]`
+                );
+                if (updatedBlockDOM) {
                     setCaretToEnd(updatedBlockDOM);
                 }
             }
@@ -84,7 +97,7 @@ const Editor = () => {
     };
 
     const deleteBlockHandler = (curBlock) => {
-        if(blocks.length > 1){
+        if (blocks.length > 1) {
             // 그 전 블럭이 존재할 때만 블럭 삭제
             setCurBlockID(curBlock.id);
             const index = blocks.map((block) => block.id).indexOf(curBlock.id);
@@ -99,27 +112,32 @@ const Editor = () => {
         // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
         // id 저장
         setTagUpdatedBlockID(updatedBlockID);
-    }
+    };
 
     return (
-        <div className={styles.editor}>
-            {blocks.map((block, key) => {
-                const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
-                return (
-                    <EditableBlock
-                        key={key}
-                        position={pos}
-                        id={block.id}
-                        tag={block.tag}
-                        html={block.html}
-                        addBlock={addBlockHandler}
-                        deleteBlock={deleteBlockHandler}
-                        updateEditor={updateEditorHandler}
-                        setCaretToTagChangedBlock={setCaretToTagChangedBlock}
-                    />
-                );
-            })}
-        </div>
+        <>
+            <div className={styles.editorName}>lorem</div>
+            <div className={styles.editor}>
+                {blocks.map((block, key) => {
+                    const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
+                    return (
+                        <EditableBlock
+                            key={key}
+                            position={pos}
+                            id={block.id}
+                            tag={block.tag}
+                            html={block.html}
+                            addBlock={addBlockHandler}
+                            deleteBlock={deleteBlockHandler}
+                            updateEditor={updateEditorHandler}
+                            setCaretToTagChangedBlock={
+                                setCaretToTagChangedBlock
+                            }
+                        />
+                    );
+                })}
+            </div>
+        </>
     );
 };
 
