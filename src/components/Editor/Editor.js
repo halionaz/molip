@@ -116,7 +116,7 @@ const Editor = () => {
 
     return (
         <>
-            <div className={styles.editorName}>lorem</div>
+            <div className={styles.editorName}>lorem ●</div>
             <div className={styles.editor}>
                 {blocks.map((block, key) => {
                     const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
