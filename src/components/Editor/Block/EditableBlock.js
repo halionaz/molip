@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ContentEditable from "@/components/utility/content-editable";
 
@@ -16,13 +16,30 @@ const EditableBlock = ({
     deleteBlock,
     updateEditor,
     setCaretToTagChangedBlock,
-    savePage
+    savePage,
 }) => {
     const blockRef = useRef(null);
 
     const [htmlBackup, setHtmlBackup] = useState(null);
     const [isTagSelectorOpen, setIsTagSelectorOpen] = useState(false);
     const [tagSelectorPos, setTagSelectorPos] = useState({ x: null, y: null });
+
+    const [placeholder, setPlaceholder] = useState(false);
+
+    useEffect(() => {
+        // 블럭이 생성될 때 placeholder 표시
+        addPlaceholder();
+    }, []);
+
+    const addPlaceholder = () => {
+        const isFirstBlockWithoutHtml = position === 1 && !html;
+        if (isFirstBlockWithoutHtml) {
+            setPlaceholder(true);
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     const onChange = (event) => {
         updateEditor({
@@ -33,7 +50,6 @@ const EditableBlock = ({
     };
 
     const onKeyDown = (event) => {
-        console.log(event.key);
         if (event.key === "/") {
             setHtmlBackup(html);
         }
@@ -56,8 +72,8 @@ const EditableBlock = ({
                 deleteBlock({ id: id, ref: blockRef.current });
             }
         }
-        if (event.key === "s"){
-            if(event.ctrlKey || event.metaKey){
+        if (event.key === "s") {
+            if (event.ctrlKey || event.metaKey) {
                 // ctrl + S
                 event.preventDefault();
                 savePage();
@@ -66,10 +82,10 @@ const EditableBlock = ({
     };
 
     const onKeyUp = (event) => {
-        if(event.key === "/"){
+        if (event.key === "/") {
             openTagSelector();
         }
-    }
+    };
 
     const openTagSelector = () => {
         setIsTagSelectorOpen(true);
@@ -87,13 +103,11 @@ const EditableBlock = ({
     };
 
     const applyTag = (newTag) => {
-        updateEditor(
-            {
-                id: id,
-                tag: newTag,
-                html: htmlBackup,
-            }
-        );
+        updateEditor({
+            id: id,
+            tag: newTag,
+            html: htmlBackup,
+        });
         closeTagSelector();
         setCaretToTagChangedBlock(id);
     };
@@ -115,7 +129,10 @@ const EditableBlock = ({
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 onKeyUp={onKeyUp}
-                className={`block ${styles.block}`}
+                className={[
+                    styles.block,
+                    placeholder ? styles.placeholder : null,
+                ].join(" ")}
             />
         </>
     );

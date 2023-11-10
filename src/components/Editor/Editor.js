@@ -15,8 +15,8 @@ import usePrevious from "../utility/usePrevious";
 // 첫 블럭
 const initialBlock = {
     id: uid(),
-    tag: "p",
-    html: "블럭을 눌러 편집을 시작해보세요!",
+    tag: "h1",
+    html: "",
 };
 
 const Editor = () => {
@@ -29,19 +29,21 @@ const Editor = () => {
     const [lastSaveBlocks, setLastSaveBlocks] = useState(null);
     const [canSave, setCanSave] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         // On page mount
 
         // 수정 지점 관리
         setLastSaveBlocks(blocks);
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         // 블럭 state가 바뀌면 수정되었다는 상태 표시
-        if(lastSaveBlocks){
-            setCanSave(JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks));
+        if (lastSaveBlocks) {
+            setCanSave(
+                JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks)
+            );
         }
-    }, [blocks,lastSaveBlocks]);
+    }, [blocks, lastSaveBlocks]);
 
     useEffect(() => {
         // 블럭이 추가 또는 삭제 되었을 때 키보드 커서 (Caret) 이동 관리 effect
@@ -135,12 +137,14 @@ const Editor = () => {
     };
 
     const savePageHandler = () => {
+        // 저장해야함
+        console.log(JSON.stringify(blocks));
         setLastSaveBlocks(blocks);
-    }
+    };
 
     return (
         <>
-            <div className={styles.editorName}>lorem {canSave && "●"}</div>
+            <div className={styles.editorName}>{(lastSaveBlocks && lastSaveBlocks[0].html) ? lastSaveBlocks[0].html : "제목 없음"} {canSave && "●"}</div>
             <div className={styles.editor}>
                 {blocks.map((block, key) => {
                     const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;

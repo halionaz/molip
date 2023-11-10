@@ -5,3 +5,7 @@
     border-radius: 6px;
     line-height: 120%;
 }
+.placeholder:empty:before{
+    color: rgba(72, 72, 72, 0.25);
+    content: "제목을 입력하세요";
+}
