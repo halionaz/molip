@@ -26,6 +26,21 @@ const Editor = () => {
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const prevBlocks = usePrevious(blocks);
 
+    const [lastSaveBlocks, setLastSaveBlocks] = useState(null);
+    const [canSave, setCanSave] = useState(false);
+
+    useEffect(()=>{
+        // On page mount
+        setLastSaveBlocks(blocks);
+    }, []);
+
+    useEffect(()=>{
+        // 블럭 state가 바뀌면 수정되었다는 상태 표시
+        if(lastSaveBlocks){
+            setCanSave(JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks));
+        }
+    }, [blocks,prevBlocks]);
+
     useEffect(() => {
         // cursor 옮기기 관리
         if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
@@ -116,7 +131,7 @@ const Editor = () => {
 
     return (
         <>
-            <div className={styles.editorName}>lorem ●</div>
+            <div className={styles.editorName}>lorem {canSave && "●"}</div>
             <div className={styles.editor}>
                 {blocks.map((block, key) => {
                     const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
