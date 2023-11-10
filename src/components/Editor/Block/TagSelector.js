@@ -10,12 +10,12 @@ const allowedTags = [
         label: "제목 1",
     },
     {
-        id: "heading",
+        id: "title",
         tag: "h2",
         label: "제목 2",
     },
     {
-        id: "subheading",
+        id: "heading",
         tag: "h3",
         label: "제목 3",
     },
@@ -24,6 +24,7 @@ const allowedTags = [
         tag: "p",
         label: "텍스트",
     },
+    { id: "sub heading", tag: "h4", label: "제목 4" },
 ];
 
 const TagSelector = ({ position, onSelect, close }) => {
@@ -96,7 +97,6 @@ const TagSelector = ({ position, onSelect, close }) => {
             document.removeEventListener("keydown", onKeyDown);
         };
     }, [tagList, selectedInd]);
-
 
     return (
         <div
