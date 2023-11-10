@@ -8,14 +8,15 @@ import TagSelector from "./TagSelector";
 import getSelectorCoord from "@/components/utility/getSelectorCoord";
 
 const EditableBlock = ({
+    position,
     id,
     tag,
     html,
-    updateEditor,
     addBlock,
     deleteBlock,
-    position,
-    setCaretToTagChangedBlock
+    updateEditor,
+    setCaretToTagChangedBlock,
+    savePage
 }) => {
     const blockRef = useRef(null);
 
@@ -32,6 +33,7 @@ const EditableBlock = ({
     };
 
     const onKeyDown = (event) => {
+        console.log(event.key);
         if (event.key === "/") {
             setHtmlBackup(html);
         }
@@ -52,6 +54,13 @@ const EditableBlock = ({
                 // 빈 블럭에서 백스페이스 누르면 블럭 삭제
                 event.preventDefault();
                 deleteBlock({ id: id, ref: blockRef.current });
+            }
+        }
+        if (event.key === "s"){
+            if(event.ctrlKey || event.metaKey){
+                // ctrl + S
+                event.preventDefault();
+                savePage();
             }
         }
     };

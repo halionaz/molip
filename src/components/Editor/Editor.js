@@ -31,6 +31,8 @@ const Editor = () => {
 
     useEffect(()=>{
         // On page mount
+
+        // 수정 지점 관리
         setLastSaveBlocks(blocks);
     }, []);
 
@@ -39,10 +41,10 @@ const Editor = () => {
         if(lastSaveBlocks){
             setCanSave(JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks));
         }
-    }, [blocks,prevBlocks]);
+    }, [blocks,lastSaveBlocks]);
 
     useEffect(() => {
-        // cursor 옮기기 관리
+        // 블럭이 추가 또는 삭제 되었을 때 키보드 커서 (Caret) 이동 관리 effect
         if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
             // 블럭이 추가됨
             const nextBlockPos =
@@ -69,6 +71,7 @@ const Editor = () => {
     }, [blocks, prevBlocks, curBlockID]);
 
     useEffect(() => {
+        // tag가 수정되었을 때 키보드 커서 (Caret) 이동 관리 effect
         if (prevBlocks && tagUpdatedBlockID) {
             const prevBlockPos = prevBlocks
                 .map((block) => block.id)
@@ -88,6 +91,12 @@ const Editor = () => {
         }
     }, [blocks, prevBlocks, tagUpdatedBlockID]);
 
+    const setCaretToTagChangedBlock = (updatedBlockID) => {
+        // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
+        // id 저장
+        setTagUpdatedBlockID(updatedBlockID);
+    };
+
     const updateEditorHandler = (updatedBlock) => {
         // blocks state의 변경들을 관리하는 함수
         // 각 블럭에서 생기는 편집들을 일괄 관리
@@ -102,6 +111,7 @@ const Editor = () => {
     };
 
     const addBlockHandler = (curBlock) => {
+        // 블럭 추가 함수
         setCurBlockID(curBlock.id);
         const newBlock = { id: uid(), tag: "p", html: "" };
         const index = blocks.map((block) => block.id).indexOf(curBlock.id);
@@ -112,6 +122,7 @@ const Editor = () => {
     };
 
     const deleteBlockHandler = (curBlock) => {
+        // 블럭 삭제 함수
         if (blocks.length > 1) {
             // 그 전 블럭이 존재할 때만 블럭 삭제
             setCurBlockID(curBlock.id);
@@ -123,11 +134,9 @@ const Editor = () => {
         }
     };
 
-    const setCaretToTagChangedBlock = (updatedBlockID) => {
-        // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
-        // id 저장
-        setTagUpdatedBlockID(updatedBlockID);
-    };
+    const savePageHandler = () => {
+        setLastSaveBlocks(blocks);
+    }
 
     return (
         <>
@@ -148,6 +157,7 @@ const Editor = () => {
                             setCaretToTagChangedBlock={
                                 setCaretToTagChangedBlock
                             }
+                            savePage={savePageHandler}
                         />
                     );
                 })}
