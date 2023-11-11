@@ -24,7 +24,7 @@ const EditableBlock = ({
     const [isTagSelectorOpen, setIsTagSelectorOpen] = useState(false);
     const [tagSelectorPos, setTagSelectorPos] = useState({ x: null, y: null });
 
-    const [placeholder, setPlaceholder] = useState(false);
+    const [placeholder, setPlaceholder] = useState("title");
 
     useEffect(() => {
         // 블럭이 생성될 때 placeholder 표시
@@ -32,12 +32,12 @@ const EditableBlock = ({
     }, []);
 
     const addPlaceholder = () => {
-        const isFirstBlockWithoutHtml = position === 1 && !html;
-        if (isFirstBlockWithoutHtml) {
-            setPlaceholder(true);
-            return true;
-        } else {
-            return false;
+        if (position === 1) {
+            // 첫 블럭이라면
+            setPlaceholder("title");
+        } else{
+            console.log("none title");
+            setPlaceholder("noneTitle");
         }
     };
 
@@ -131,7 +131,7 @@ const EditableBlock = ({
                 onKeyUp={onKeyUp}
                 className={[
                     styles.block,
-                    placeholder ? styles.placeholder : null,
+                    placeholder === "title" ? styles.titlePlaceholder : styles.placeholder,
                 ].join(" ")}
             />
         </>
