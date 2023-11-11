@@ -36,7 +36,6 @@ const EditableBlock = ({
             // 첫 블럭이라면
             setPlaceholder("title");
         } else{
-            console.log("none title");
             setPlaceholder("noneTitle");
         }
     };

@@ -1,6 +1,7 @@
 import styles from "./Sidebar.module.css";
 
 import { VscFiles, VscSearch, VscGitCommit } from "react-icons/vsc";
+import { GoArchive, GoFile, GoHistory, GoSearch } from "react-icons/go";
 
 const Sidebar = () => {
     return (
@@ -8,12 +9,15 @@ const Sidebar = () => {
             <h1 className={styles.molip}>💭 mol.ip</h1>
             <div className={styles.bars}>
                 <div className={styles.mainBar}>
-                    <VscFiles className={styles.mainBarBtn} />
-                    <VscSearch className={styles.mainBarBtn} />
-                    <VscGitCommit className={styles.mainBarBtn} />
+                    <GoArchive className={styles.mainBarBtn} />
+                    <GoSearch className={styles.mainBarBtn} />
+                    <GoHistory className={styles.mainBarBtn} />
                 </div>
                 <div className={styles.subBar}>
-                    <div>lorem</div>
+                    <div className={styles.file}>
+                        <GoFile className={styles.fileIcon} />
+                        <span className={styles.fileName}>lorem</span>
+                    </div>
                 </div>
             </div>
         </nav>

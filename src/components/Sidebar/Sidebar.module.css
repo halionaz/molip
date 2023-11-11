@@ -40,6 +40,13 @@
 
 .subBar {
     flex: 1 1 0;
-    /* padding-left: 5px; */
-    /* border-left: 1px solid #e0e0e0; */
+    padding: 1rem 1rem;
+}
+.file{
+    color: #696969;
+    display: flex;
+    vertical-align: middle;
+}
+.fileName{
+    margin-left: 0.5rem;
 }

@@ -4,6 +4,7 @@
     margin: 2px 0;
     border-radius: 6px;
     line-height: 120%;
+    cursor: text;
 }
 .titlePlaceholder:empty:before{
     color: rgba(72, 72, 72, 0.25);

@@ -6,7 +6,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 
 const LoremProject = () => {
     return (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", height: "100%" }}>
             <div className={styles.main}>
                 <Sidebar />
                 <div className={styles.editor}>
