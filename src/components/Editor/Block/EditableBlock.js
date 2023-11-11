@@ -35,8 +35,6 @@ const EditableBlock = ({
         if (position === 1) {
             // 첫 블럭이라면
             setPlaceholder("title");
-        } else{
-            setPlaceholder("noneTitle");
         }
     };
 
@@ -86,6 +84,15 @@ const EditableBlock = ({
         }
     };
 
+    const onFocus = () => {
+        if (position !== 1) {
+            setPlaceholder("noneTitle");
+        }
+    };
+    const onBlur = () => {
+        setPlaceholder(position === 1 ? "title" : null);
+    };
+
     const openTagSelector = () => {
         setIsTagSelectorOpen(true);
         // 좌표값 잡기
@@ -128,9 +135,12 @@ const EditableBlock = ({
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 onKeyUp={onKeyUp}
+                onFocus={onFocus}
+                onBlur={onBlur}
                 className={[
                     styles.block,
-                    placeholder === "title" ? styles.titlePlaceholder : styles.placeholder,
+                    placeholder === "title" && styles.titlePlaceholder,
+                    placeholder === "noneTitle" && styles.placeholder,
                 ].join(" ")}
             />
         </>
