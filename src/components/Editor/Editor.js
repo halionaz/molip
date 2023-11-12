@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 // utility import
 import uid from "../utility/uid";
+import pid from "../utility/pid";
 
 // component import
 import styles from "./Editor.module.css";
@@ -31,10 +32,17 @@ const Editor = ({id}) => {
 
     useEffect(() => {
         // On page mount
-
-        // 수정 지점 관리
-        setLastSaveBlocks(blocks);
-        console.log(id);
+        console.log("Start!");
+        const savedData = window.localStorage.getItem(id);
+        if(savedData){
+            const savedBlocks = JSON.parse(savedData);
+            setBlocks(savedBlocks);
+            // 수정 지점 관리
+            setLastSaveBlocks(savedBlocks);
+        } else {
+            setLastSaveBlocks(blocks);
+        }
+        console.log("End!");
     }, []);
 
     useEffect(() => {
@@ -139,7 +147,8 @@ const Editor = ({id}) => {
 
     const savePageHandler = () => {
         // 저장해야함
-        console.log(JSON.stringify(blocks));
+        window.localStorage.setItem(id, JSON.stringify(blocks));
+        console.log();
         setLastSaveBlocks(blocks);
     };
 
