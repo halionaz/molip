@@ -19,7 +19,7 @@ const initialBlock = {
     html: "",
 };
 
-const Editor = () => {
+const Editor = ({id}) => {
     // 현재 에디터에 있는 블럭들을 저장하는 state
     const [blocks, setBlocks] = useState([initialBlock]);
     const [curBlockID, setCurBlockID] = useState(null);
@@ -34,6 +34,7 @@ const Editor = () => {
 
         // 수정 지점 관리
         setLastSaveBlocks(blocks);
+        console.log(id);
     }, []);
 
     useEffect(() => {
