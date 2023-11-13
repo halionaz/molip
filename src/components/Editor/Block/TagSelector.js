@@ -52,7 +52,6 @@ const TagSelector = ({ position, onSelect, close }) => {
             switch (event.key) {
                 case "Enter":
                     event.preventDefault();
-                    console.log(tagList[selectedInd].tag);
                     onSelect(tagList[selectedInd].tag);
                     break;
                 case "Backspace":

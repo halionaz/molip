@@ -146,7 +146,6 @@ const Editor = ({ id }) => {
     const savePageHandler = () => {
         // 저장해야함
         window.localStorage.setItem(id, JSON.stringify(blocks));
-        console.log();
         setLastSaveBlocks(blocks);
     };
 
