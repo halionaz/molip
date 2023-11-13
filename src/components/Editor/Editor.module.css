@@ -1,8 +1,18 @@
+.main {
+    flex: 1 1 0px;
+    min-width: 1px;
+    margin: 0 1rem;
+
+    display: flex;
+    flex-direction: column;
+}
 .editorName{
-    padding-top: 12px;
+    padding: 12px 0;
 }
 .editor{
-    margin: 10px;
+    flex: 1 1 0;
+
+    margin: 0 4rem;
 }
 
 /* 사용자가 쓰게 되는 문서의 CSS 속성 */

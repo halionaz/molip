@@ -20,7 +20,7 @@ const initialBlock = {
     html: "",
 };
 
-const Editor = ({id}) => {
+const Editor = ({ id }) => {
     // 현재 에디터에 있는 블럭들을 저장하는 state
     const [blocks, setBlocks] = useState([initialBlock]);
     const [curBlockID, setCurBlockID] = useState(null);
@@ -32,9 +32,8 @@ const Editor = ({id}) => {
 
     useEffect(() => {
         // On page mount
-        console.log("Start!");
         const savedData = window.localStorage.getItem(id);
-        if(savedData){
+        if (savedData) {
             const savedBlocks = JSON.parse(savedData);
             setBlocks(savedBlocks);
             // 수정 지점 관리
@@ -42,7 +41,6 @@ const Editor = ({id}) => {
         } else {
             setLastSaveBlocks(blocks);
         }
-        console.log("End!");
     }, []);
 
     useEffect(() => {
@@ -153,8 +151,13 @@ const Editor = ({id}) => {
     };
 
     return (
-        <>
-            <div className={styles.editorName}>{(lastSaveBlocks && lastSaveBlocks[0].html) ? lastSaveBlocks[0].html : "제목 없음"} {canSave && "●"}</div>
+        <div className={styles.main}>
+            <div className={styles.editorName}>
+                {lastSaveBlocks && lastSaveBlocks[0].html
+                    ? lastSaveBlocks[0].html
+                    : "제목 없음"}{" "}
+                {canSave && "●"}
+            </div>
             <div className={styles.editor}>
                 {blocks.map((block, key) => {
                     const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
@@ -176,7 +179,7 @@ const Editor = ({id}) => {
                     );
                 })}
             </div>
-        </>
+        </div>
     );
 };
 

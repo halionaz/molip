@@ -1,16 +1,21 @@
-.block{
-    padding: 6px;
-    background-color: whitesmoke;
+.block {
+    padding: 8px;
     margin: 2px 0;
     border-radius: 6px;
     line-height: 120%;
     cursor: text;
 }
-.titlePlaceholder:empty:before{
+
+.block:focus {
+    outline: 0px solid transparent;
+}
+
+.titlePlaceholder:empty:before {
     color: rgba(72, 72, 72, 0.25);
     content: "제목 없음";
 }
-.placeholder:empty:before{
+
+.placeholder:empty:before {
     color: rgba(72, 72, 72, 0.25);
     content: "/를 눌러 태그 변경";
 }
