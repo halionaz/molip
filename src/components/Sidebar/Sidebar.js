@@ -15,7 +15,7 @@ const Sidebar = () => {
                 <div className={styles.subBar}>
                     <div className={styles.file}>
                         <GoFile className={styles.fileIcon} />
-                        <span className={styles.fileName}>halion</span>
+                        <span className={styles.fileName}>테스트 문서</span>
                     </div>
                 </div>
             </div>
