@@ -2,16 +2,13 @@
     width: 270px;
     display: flex;
     flex-direction: column;
-}
-
-.molip {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-
-    font-size: 30px;
-    font-weight: 600;
+    background-color: #FBFBFA;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .bars {
@@ -24,6 +21,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #f1f1ef;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .mainBarBtn {
@@ -31,22 +31,41 @@
     border: solid 1px #e0e0e0;
     border-radius: 8px;
 
+    cursor: pointer;
+
     width: 34px;
     height: 34px;
 
     margin: 4px 8px;
     padding: 6px;
 }
+.mainBarBtn:hover{
+    background-color: #E1E1E0;
+}
 
 .subBar {
     flex: 1 1 0;
-    padding: 1rem 1rem;
+    padding: 1rem 0.5rem;
 }
-.file{
+
+.file {
     color: #696969;
+
     display: flex;
+    align-items: center;
     vertical-align: middle;
+    
+    cursor: pointer;
+
+    border-radius: 4px;
+    padding: 4px 1rem;
+
 }
-.fileName{
+.file:hover {
+    background-color: #f1f1ef;
+}
+
+.fileName {
+    flex: 1 1 0;
     margin-left: 0.5rem;
 }
