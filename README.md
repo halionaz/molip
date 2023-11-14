@@ -3,14 +3,14 @@
 
 ## 이정표
 ### 오늘의 이정표
-- [x] placeholder 보완
 - [ ] 에디터 까리하게 CSS 칠하기
 - [ ] 서버 레이아웃 짜기
 
 ### 지나간 이정표
-- [x] placeholder 만들기
 - [x] 저장 메소드 간단 구현
 - [x] 제목 4 태그 추가
+- [x] placeholder 보완
+- [x] placeholder 만들기
 
 ### 미래의 이정표
 - 시스템

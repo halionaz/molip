@@ -5,8 +5,7 @@ import styles from "./Page.module.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 
 const Page = ({ params }) => {
-    const pageID = params.id;
-
+    const pageID = params.pid;
     return (
         <div style={{ display: "flex", height: "100%" }}>
             <div className={styles.main}>
