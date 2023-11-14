@@ -1,30 +1,30 @@
 import { matchSorter } from "match-sorter";
 import { useEffect, useState } from "react";
-import styles from "./SelectMenu.module.css";
+import styles from "./TagSelector.module.css";
 
 const HEIGHT = 150;
 const allowedTags = [
-    {
-        id: "page-title",
-        tag: "h1",
-        label: "제목 1",
-    },
-    {
-        id: "title",
-        tag: "h2",
-        label: "제목 2",
-    },
-    {
-        id: "heading",
-        tag: "h3",
-        label: "제목 3",
-    },
     {
         id: "paragraph",
         tag: "p",
         label: "텍스트",
     },
-    { id: "sub heading", tag: "h4", label: "제목 4" },
+    {
+        id: "page-title",
+        tag: "h1",
+        label: "제목1",
+    },
+    {
+        id: "title",
+        tag: "h2",
+        label: "제목2",
+    },
+    {
+        id: "heading",
+        tag: "h3",
+        label: "제목3",
+    },
+    { id: "sub heading", tag: "h4", label: "제목4" },
 ];
 
 const TagSelector = ({ position, onSelect, close }) => {
@@ -99,20 +99,22 @@ const TagSelector = ({ position, onSelect, close }) => {
 
     return (
         <div
-            className="SelectMenu"
+            className={styles.selector}
             style={{
-                top: `${y}`,
-                left: `${x}`,
+                top: y,
+                left: x,
                 justifyContent: !isMenuOutsideOfTop ? "flex-end" : "flex-start",
             }}
         >
-            <div className="Items">
+            <div className={styles.items}>
                 {tagList.map((item, key) => {
                     const isSelected = tagList.indexOf(item) === selectedInd;
                     return (
                         <div
                             key={key}
-                            className={isSelected ? styles.selected : null}
+                            className={`${styles.item} ${
+                                isSelected ? styles.selected : null
+                            }`}
                             tabIndex="0"
                             onClick={() => {
                                 onSelect(item.tag);
