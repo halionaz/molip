@@ -24,7 +24,7 @@ const EditableBlock = ({
     const [isTagSelectorOpen, setIsTagSelectorOpen] = useState(false);
     const [tagSelectorPos, setTagSelectorPos] = useState({ x: null, y: null });
 
-    const [placeholder, setPlaceholder] = useState("title");
+    const [placeholder, setPlaceholder] = useState("");
 
     useEffect(() => {
         // 블럭이 생성될 때 placeholder 표시
