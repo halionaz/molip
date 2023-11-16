@@ -1,7 +1,15 @@
+.container{
+    flex: 0 0 20%;
+    max-width: 20%;
+}
 .sidebar {
-    width: 270px;
+    position: sticky;
+    top: var(--navbar-height);
+    height: calc(100vh - var(--navbar-height));
+
     display: flex;
     flex-direction: column;
+
     background-color: #FBFBFA;
     -webkit-touch-callout: none;
     -webkit-user-select: none;

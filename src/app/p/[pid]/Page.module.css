@@ -8,8 +8,8 @@
     top: 0;
     z-index: 5;
     
-    height: 3.75rem;
-    /* padding: 0.5rem 1rem; */
+    height: var(--navbar-height);
+    padding: 0.5rem 1rem;
 
     backdrop-filter: blur(5px);
     background-color: #ffffff4D

@@ -2,7 +2,7 @@
 
 import Editor from "@/components/Editor/Editor";
 import styles from "./Page.module.css";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import LeftSidebar from "@/components/Sidebar/LeftSidebar";
 
 const Page = ({ params }) => {
     const pageID = params.pid;
@@ -12,7 +12,7 @@ const Page = ({ params }) => {
                 <div className={styles.logo}>몰입</div>
             </header>
             <div className={styles.main}>
-                <Sidebar />
+                <LeftSidebar />
                 <Editor id={pageID} />
             </div>
         </div>
