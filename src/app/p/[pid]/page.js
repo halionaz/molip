@@ -7,7 +7,10 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 const Page = ({ params }) => {
     const pageID = params.pid;
     return (
-        <div style={{ display: "flex", height: "100%" }}>
+        <div className={styles.page}>
+            <header className={styles.header}>
+                <div className={styles.logo}>몰입</div>
+            </header>
             <div className={styles.main}>
                 <Sidebar />
                 <Editor id={pageID} />
