@@ -6,6 +6,10 @@ const LeftSidebar = () => {
     return (
         <div className={styles.container}>
             <nav className={styles.sidebar}>
+                <header className={styles.header}>
+                    <div className={styles.logo}>💭</div>
+                    <div className={styles.productName}>몰입</div>
+                </header>
                 <div className={styles.bars}>
                     <div className={styles.mainBar}>
                         <GoArchive className={styles.mainBarBtn} />
