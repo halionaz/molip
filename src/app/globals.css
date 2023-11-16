@@ -2,3 +2,8 @@ body, html {
     width: 100%;
     height: 100%;
 }
+
+/* CSS 변수 모음 */
+:root{
+    --navbar-height : 3.75rem;
+}
