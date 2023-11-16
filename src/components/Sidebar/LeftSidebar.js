@@ -12,9 +12,20 @@ const LeftSidebar = () => {
                 </header>
                 <div className={styles.bars}>
                     <div className={styles.mainBar}>
-                        <GoArchive className={styles.mainBarBtn} />
-                        <GoSearch className={styles.mainBarBtn} />
-                        <GoHistory className={styles.mainBarBtn} />
+                        <div
+                            className={[
+                                styles.mainBarComponent,
+                                styles.selected,
+                            ].join(" ")}
+                        >
+                            <GoArchive className={styles.mainBarBtn} />
+                        </div>
+                        <div className={styles.mainBarComponent}>
+                            <GoSearch className={styles.mainBarBtn} />
+                        </div>
+                        <div className={styles.mainBarComponent}>
+                            <GoHistory className={styles.mainBarBtn} />
+                        </div>
                     </div>
                     <div className={styles.subBar}>
                         <div className={styles.file}>
