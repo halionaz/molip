@@ -16,7 +16,6 @@ const EditableBlock = ({
     deleteBlock,
     updateEditor,
     setCaretToTagChangedBlock,
-    savePage,
 }) => {
     const blockRef = useRef(null);
 
@@ -47,7 +46,7 @@ const EditableBlock = ({
     };
 
     const onKeyDown = (event) => {
-        if (event.key === "/") {
+        if (event.key === "/" && !event.shiftKey) {
             setHtmlBackup(html);
         }
         if (event.key === "Enter") {
@@ -69,24 +68,20 @@ const EditableBlock = ({
                 deleteBlock({ id: id, ref: blockRef.current });
             }
         }
-        // if (event.key === "s") {
-        //     if (event.ctrlKey || event.metaKey) {
-        //         console.log("이랏")
-        //         // ctrl + S
-        //         event.preventDefault();
-        //         savePage();
-        //     }
-        // }
     };
 
     const onKeyUp = (event) => {
         if (event.key === "/") {
-            openTagSelector();
+            if(!event.shiftKey){
+                // ? 입력이 아니라면
+                openTagSelector();
+            }
         }
     };
 
     const onFocus = () => {
         if (position !== 1) {
+            console.log("발현")
             setPlaceholder("noneTitle");
         }
     };
@@ -140,8 +135,8 @@ const EditableBlock = ({
                 onBlur={onBlur}
                 className={[
                     styles.block,
-                    placeholder === "title" && styles.titlePlaceholder,
-                    placeholder === "noneTitle" && styles.placeholder,
+                    placeholder === "title" ? styles.titlePlaceholder : null,
+                    placeholder === "noneTitle" ? styles.placeholder : null,
                 ].join(" ")}
             />
         </>

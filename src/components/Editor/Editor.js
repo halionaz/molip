@@ -39,7 +39,7 @@ const Editor = ({ id }) => {
             // 수정 지점 관리
             setLastSaveBlocks(savedBlocks);
         } else {
-            setLastSaveBlocks(blocks);
+            setLastSaveBlocks([initialBlock]);
         }
     }, []);
 
@@ -183,7 +183,6 @@ const Editor = ({ id }) => {
                             setCaretToTagChangedBlock={
                                 setCaretToTagChangedBlock
                             }
-                            savePage={savePageHandler}
                         />
                     );
                 })}
