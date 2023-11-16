@@ -43,6 +43,16 @@ const Editor = ({ id }) => {
         }
     }, []);
 
+    useEffect(()=>{
+        // Ctrl + S를 눌렀을 때, 저장하는 기능
+        document.addEventListener("keydown", (event) => {
+            if((event.metaKey || event.ctrlKey) && event.key === "s"){
+                event.preventDefault();
+                savePageHandler();
+            }
+        });
+    }, [blocks]);
+
     useEffect(() => {
         // 블럭 state가 바뀌면 수정되었다는 상태 표시
         if (lastSaveBlocks) {

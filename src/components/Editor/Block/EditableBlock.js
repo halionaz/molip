@@ -69,13 +69,14 @@ const EditableBlock = ({
                 deleteBlock({ id: id, ref: blockRef.current });
             }
         }
-        if (event.key === "s") {
-            if (event.ctrlKey || event.metaKey) {
-                // ctrl + S
-                event.preventDefault();
-                savePage();
-            }
-        }
+        // if (event.key === "s") {
+        //     if (event.ctrlKey || event.metaKey) {
+        //         console.log("이랏")
+        //         // ctrl + S
+        //         event.preventDefault();
+        //         savePage();
+        //     }
+        // }
     };
 
     const onKeyUp = (event) => {
