@@ -1,22 +1,23 @@
 // 특정 프로젝트를 열었다고 가정
 
+"use client"
+
 import Editor from "@/components/Editor/Editor";
 import styles from "./Page.module.css";
-import LeftSidebar from "@/components/Sidebar/LeftSidebar";
-import RightSidebar from "@/components/Sidebar/RightSidebar";
+import { useEffect } from "react";
 
 const Page = ({ params }) => {
+    useEffect(()=>{
+        document.addEventListener("keydown", (event) => {
+            if((event.metaKey || event.ctrlKey) && event.key === "s"){
+                event.preventDefault();
+            }
+        });
+    }, []);
     const pageID = params.pid;
     return (
         <div className={styles.page}>
-            <div className={styles.main}>
-                <LeftSidebar />
-                <div className={styles.center}>
-                    <div className={styles.centerHeader}></div>
-                    <Editor id={pageID} />
-                </div>
-                <RightSidebar />
-            </div>
+            <Editor id={pageID} />
         </div>
     );
 };

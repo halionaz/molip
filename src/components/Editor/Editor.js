@@ -12,6 +12,8 @@ import styles from "./Editor.module.css";
 import EditableBlock from "./Block/EditableBlock";
 import setCaretToEnd from "../utility/setCaretToEnd";
 import usePrevious from "../utility/usePrevious";
+import LeftSidebar from "@/components/Sidebar/LeftSidebar";
+import RightSidebar from "@/components/Sidebar/RightSidebar";
 
 // 첫 블럭
 const initialBlock = {
@@ -25,6 +27,7 @@ const Editor = ({ id }) => {
     const [blocks, setBlocks] = useState([initialBlock]);
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
+    const [saving, setSaving] = useState(false);
     const prevBlocks = usePrevious(blocks);
 
     const [lastSaveBlocks, setLastSaveBlocks] = useState(null);
@@ -32,6 +35,14 @@ const Editor = ({ id }) => {
 
     useEffect(() => {
         // On page mount
+
+        document.addEventListener("keydown", (event)=>{
+            if ((event.metaKey || event.ctrlKey) && event.key === "s") {
+                event.preventDefault();
+                setSaving(true);
+            }
+        });
+
         const savedData = window.localStorage.getItem(id);
         if (savedData) {
             const savedBlocks = JSON.parse(savedData);
@@ -42,16 +53,6 @@ const Editor = ({ id }) => {
             setLastSaveBlocks([initialBlock]);
         }
     }, []);
-
-    useEffect(()=>{
-        // Ctrl + S를 눌렀을 때, 저장하는 기능
-        document.addEventListener("keydown", (event) => {
-            if((event.metaKey || event.ctrlKey) && event.key === "s"){
-                event.preventDefault();
-                savePageHandler();
-            }
-        });
-    }, [blocks]);
 
     useEffect(() => {
         // 블럭 state가 바뀌면 수정되었다는 상태 표시
@@ -110,6 +111,14 @@ const Editor = ({ id }) => {
         }
     }, [blocks, prevBlocks, tagUpdatedBlockID]);
 
+    useEffect(()=>{
+        // 저장 버그 관리용 effect
+        if(saving){
+            savePageHandler();
+            setSaving(false);
+        }
+    },[blocks,saving]);
+
     const setCaretToTagChangedBlock = (updatedBlockID) => {
         // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
         // id 저장
@@ -155,38 +164,51 @@ const Editor = ({ id }) => {
 
     const savePageHandler = () => {
         // 저장해야함
+        console.log("저장");
         window.localStorage.setItem(id, JSON.stringify(blocks));
         setLastSaveBlocks(blocks);
     };
 
     return (
-        <div className={styles.main}>
-            <div className={styles.editorName}>
-                {lastSaveBlocks && lastSaveBlocks[0].html
-                    ? lastSaveBlocks[0].html
-                    : "제목 없음"}{" "}
-                {canSave && "●"}
+        <div
+            className={styles.main}
+            onKeyDown={(event) => {
+            }}
+        >
+            <LeftSidebar />
+            <div className={styles.center}>
+                <div className={styles.centerHeader}></div>
+                <div className={styles.container}>
+                    <div className={styles.editorName}>
+                        {lastSaveBlocks && lastSaveBlocks[0].html
+                            ? lastSaveBlocks[0].html
+                            : "제목 없음"}{" "}
+                        {canSave && "●"}
+                    </div>
+                    <div className={styles.editor}>
+                        {blocks.map((block, key) => {
+                            const pos =
+                                blocks.map((b) => b.id).indexOf(block.id) + 1;
+                            return (
+                                <EditableBlock
+                                    key={key}
+                                    position={pos}
+                                    id={block.id}
+                                    tag={block.tag}
+                                    html={block.html}
+                                    addBlock={addBlockHandler}
+                                    deleteBlock={deleteBlockHandler}
+                                    updateEditor={updateEditorHandler}
+                                    setCaretToTagChangedBlock={
+                                        setCaretToTagChangedBlock
+                                    }
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
-            <div className={styles.editor}>
-                {blocks.map((block, key) => {
-                    const pos = blocks.map((b) => b.id).indexOf(block.id) + 1;
-                    return (
-                        <EditableBlock
-                            key={key}
-                            position={pos}
-                            id={block.id}
-                            tag={block.tag}
-                            html={block.html}
-                            addBlock={addBlockHandler}
-                            deleteBlock={deleteBlockHandler}
-                            updateEditor={updateEditorHandler}
-                            setCaretToTagChangedBlock={
-                                setCaretToTagChangedBlock
-                            }
-                        />
-                    );
-                })}
-            </div>
+            <RightSidebar />
         </div>
     );
 };
