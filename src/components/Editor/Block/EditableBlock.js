@@ -81,7 +81,6 @@ const EditableBlock = ({
 
     const onFocus = () => {
         if (position !== 1) {
-            console.log("발현")
             setPlaceholder("noneTitle");
         }
     };

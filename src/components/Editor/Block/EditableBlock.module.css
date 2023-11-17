@@ -10,11 +10,11 @@
 }
 
 .titlePlaceholder:empty:before {
-    color: rgba(72, 72, 72, 0.25);
+    color: var(--placeholder-gray);
     content: "제목 없음";
 }
 
 .placeholder:empty:before {
-    color: rgba(72, 72, 72, 0.25);
+    color: var(--placeholder-gray);
     content: "/를 눌러 태그 변경";
 }
