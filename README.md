@@ -1,6 +1,9 @@
 # 💭 mol.ip
 아이디어를 기록하는 가장 효과적인 방법
 
+## 아이디어
+-[ ] 어디에 저장해야할지 모르겠다면, 백지에 입력해보세요! < Landing Page
+
 ## 이정표
 ### 오늘의 이정표
 - [ ] 서버 레이아웃 짜기
@@ -87,3 +90,9 @@
     - 환경 설정
     - 페이지 목차 or 페이지 내 검색 or 페이지 히스토리
     - 도움말, 고객지원 (우측 하단 버튼)
+
+## 백엔드 계획
+- ACCOUNT TABLE
+:: userID, userName, userMail
+- PAGE TABLE
+:: pid, pwriter, ptitle, pcontents, phistory, parentsPID
