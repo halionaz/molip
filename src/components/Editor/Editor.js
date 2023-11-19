@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 // utility import
 import uid from "../utility/uid";
-import pid from "../utility/pid";
 
 // component import
 import styles from "./Editor.module.css";
@@ -14,17 +13,21 @@ import setCaretToEnd from "../utility/setCaretToEnd";
 import usePrevious from "../utility/usePrevious";
 import LeftSidebar from "@/components/Sidebar/LeftSidebar";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
+import Title from "./Block/Title";
 
 // 첫 블럭
 const initialBlock = {
     id: uid(),
-    tag: "h1",
+    tag: "p",
     html: "",
 };
 
 const Editor = ({ id }) => {
-    // 현재 에디터에 있는 블럭들을 저장하는 state
+    // DB에서 받아와야하는 녀석들
+    const [emoji, setEmoji] = useState("");
+    const [title, setTitle] = useState("");
     const [blocks, setBlocks] = useState([initialBlock]);
+
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const [saving, setSaving] = useState(false);
@@ -36,12 +39,7 @@ const Editor = ({ id }) => {
     useEffect(() => {
         // On page mount
 
-        document.addEventListener("keydown", (event)=>{
-            if ((event.metaKey || event.ctrlKey) && event.key === "s") {
-                event.preventDefault();
-                setSaving(true);
-            }
-        });
+        document.addEventListener("keydown", setSaveHandler);
 
         const savedData = window.localStorage.getItem(id);
         if (savedData) {
@@ -52,6 +50,8 @@ const Editor = ({ id }) => {
         } else {
             setLastSaveBlocks([initialBlock]);
         }
+
+        return document.removeEventListener("keydown", setSaveHandler);
     }, []);
 
     useEffect(() => {
@@ -111,13 +111,13 @@ const Editor = ({ id }) => {
         }
     }, [blocks, prevBlocks, tagUpdatedBlockID]);
 
-    useEffect(()=>{
+    useEffect(() => {
         // 저장 버그 관리용 effect
-        if(saving){
+        if (saving) {
             savePageHandler();
             setSaving(false);
         }
-    },[blocks,saving]);
+    }, [blocks, saving]);
 
     const setCaretToTagChangedBlock = (updatedBlockID) => {
         // 블럭의 태그가 수정되었을 때, 그 블럭의 끝으로 키보드 커서 옮겨줘야 하므로
@@ -162,6 +162,13 @@ const Editor = ({ id }) => {
         }
     };
 
+    const setSaveHandler = (event) => {
+        if ((event.metaKey || event.ctrlKey) && event.key === "s") {
+            event.preventDefault();
+            setSaving(true);
+        }
+    };
+
     const savePageHandler = () => {
         // 저장해야함
         console.log("저장");
@@ -170,21 +177,18 @@ const Editor = ({ id }) => {
     };
 
     return (
-        <div
-            className={styles.main}
-            onKeyDown={(event) => {
-            }}
-        >
+        <div className={styles.main}>
             <LeftSidebar />
             <div className={styles.center}>
                 <div className={styles.centerHeader}></div>
                 <div className={styles.container}>
-                    <div className={styles.editorName}>
-                        {lastSaveBlocks && lastSaveBlocks[0].html
-                            ? lastSaveBlocks[0].html
-                            : "제목 없음"}{" "}
-                        {canSave && "●"}
-                    </div>
+                    <Title
+                        titleName={title}
+                        emoji={emoji}
+                        setTitle={setTitle}
+                        setEmoji={setEmoji}
+                        canSave={canSave}
+                    />
                     <div className={styles.editor}>
                         {blocks.map((block, key) => {
                             const pos =

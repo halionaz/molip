@@ -8,12 +8,8 @@
     outline: 0px solid transparent;
 }
 
-.titlePlaceholder:empty:before {
-    color: var(--placeholder-gray);
-    content: "제목 없음";
-}
-
-.placeholder:empty:before {
+.placeholder:empty::before{
     color: var(--placeholder-gray);
     content: "/를 눌러 태그 변경";
+
 }

@@ -23,19 +23,7 @@ const EditableBlock = ({
     const [isTagSelectorOpen, setIsTagSelectorOpen] = useState(false);
     const [tagSelectorPos, setTagSelectorPos] = useState({ x: null, y: null });
 
-    const [placeholder, setPlaceholder] = useState("");
-
-    useEffect(() => {
-        // 블럭이 생성될 때 placeholder 표시
-        addPlaceholder();
-    }, []);
-
-    const addPlaceholder = () => {
-        if (position === 1) {
-            // 첫 블럭이라면
-            setPlaceholder("title");
-        }
-    };
+    const [placeholder, setPlaceholder] = useState(false);
 
     const onChange = (event) => {
         updateEditor({
@@ -72,7 +60,7 @@ const EditableBlock = ({
 
     const onKeyUp = (event) => {
         if (event.key === "/") {
-            if(!event.shiftKey){
+            if (!event.shiftKey) {
                 // ? 입력이 아니라면
                 openTagSelector();
             }
@@ -80,12 +68,10 @@ const EditableBlock = ({
     };
 
     const onFocus = () => {
-        if (position !== 1) {
-            setPlaceholder("noneTitle");
-        }
+        setPlaceholder(true);
     };
     const onBlur = () => {
-        setPlaceholder(position === 1 ? "title" : null);
+        setPlaceholder(false);
     };
 
     const openTagSelector = () => {
@@ -134,8 +120,7 @@ const EditableBlock = ({
                 onBlur={onBlur}
                 className={[
                     styles.block,
-                    placeholder === "title" ? styles.titlePlaceholder : null,
-                    placeholder === "noneTitle" ? styles.placeholder : null,
+                    placeholder ? styles.placeholder : null,
                 ].join(" ")}
             />
         </>

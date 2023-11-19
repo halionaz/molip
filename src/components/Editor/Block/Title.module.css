@@ -1,0 +1,23 @@
+.titleBlock{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 50;
+    position: sticky;
+    top: 0;
+}
+.title, .titleEmoji{
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 120%;
+
+    cursor: text;
+}
+.title:focus, .titleEmoji:focus {
+    outline: 0px solid transparent;
+}
+
+.title:empty::before{
+    color: var(--placeholder-gray);
+    content: "제목 없음";
+}
