@@ -51,8 +51,21 @@ const TagSelector = ({ position, onSelect, close }) => {
         const onKeyDown = (event) => {
             switch (event.key) {
                 case "Enter":
-                    event.preventDefault();
-                    onSelect(tagList[selectedInd].tag);
+                    if(tagList.length === 0){
+                        // 해당하는 태그가 없다면
+                        if(!event.shiftKey){
+                            // shift + Enter가 아니라면 새로운 블럭 생성
+                            console.log("새 블럭 생성!");
+                            event.preventDefault();
+                            close();
+                        } else {
+                            // 안에서 칸 띄우기
+                            close();
+                        }
+                    } else {
+                        event.preventDefault();
+                        onSelect(tagList[selectedInd].tag);
+                    }
                     break;
                 case "Backspace":
                     if (inp) {
