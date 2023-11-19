@@ -33,9 +33,10 @@
     gap: 1rem;
 }
 
-.headerIcon{
+.headerIcon {
     font-size: 24px;
 }
+
 .profile {
     height: 32px;
     width: 32px;
@@ -44,7 +45,55 @@
     border-radius: 50%;
 }
 
+.headerIcon,
+.profile {
+    cursor: pointer;
+}
+
 .bars {
     display: flex;
+    flex-direction: column;
     flex: 1 1 0;
+}
+
+.mainBar {
+    height: 3rem;
+    display: flex;
+}
+
+.mainBarComponent {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1ef;
+
+    cursor: pointer;
+}
+
+.mainBarComponent:not(.selected):hover {
+    background-color: #f5f5f1;
+}
+
+.selected {
+    background-color: var(--default-light-background);
+}
+
+.mainBarBtn {
+    color: #696969;
+    border: solid 1px #e0e0e0;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    width: 34px;
+    height: 34px;
+
+    margin: 4px 8px;
+    padding: 6px;
+}
+
+.subBar {
+    flex: 1 1 0;
+    padding: 1rem 0.5rem;
 }
