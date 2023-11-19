@@ -17,6 +17,10 @@
     outline: 0px solid transparent;
 }
 
+.titleEmoji:empty::before{
+    color: var(--placeholder-gray);
+    content: "🚧";
+}
 .title:empty::before{
     color: var(--placeholder-gray);
     content: "제목 없음";
