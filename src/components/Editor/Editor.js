@@ -39,9 +39,15 @@ const Editor = ({ id }) => {
     useEffect(() => {
         // On page mount
 
-        document.addEventListener("keydown", setSaveHandler);
+        document.addEventListener("keydown", (event) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === "s") {
+                event.preventDefault();
+                setSaving(true);
+            }
+        });
 
         const savedData = window.localStorage.getItem(id);
+
         if (savedData) {
             const savedBlocks = JSON.parse(savedData);
             setBlocks(savedBlocks);
@@ -50,8 +56,6 @@ const Editor = ({ id }) => {
         } else {
             setLastSaveBlocks([initialBlock]);
         }
-
-        return document.removeEventListener("keydown", setSaveHandler);
     }, []);
 
     useEffect(() => {
@@ -159,13 +163,6 @@ const Editor = ({ id }) => {
             // curBlock 삭제
             updatedBlocks.splice(index, 1);
             setBlocks(updatedBlocks);
-        }
-    };
-
-    const setSaveHandler = (event) => {
-        if ((event.metaKey || event.ctrlKey) && event.key === "s") {
-            event.preventDefault();
-            setSaving(true);
         }
     };
 
