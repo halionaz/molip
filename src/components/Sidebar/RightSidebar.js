@@ -5,11 +5,6 @@ const RightSidebar = () => {
     return (
         <div className={styles.container}>
             <nav className={styles.sidebar}>
-                <header className={styles.header}>
-                    <GoQuestion className={styles.headerIcon} />
-                    <GoGear className={styles.headerIcon} />
-                    <div className={styles.profile}></div>
-                </header>
                 <div className={styles.bars}>
                     <div className={styles.mainBar}>
                         <div

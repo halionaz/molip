@@ -19,37 +19,6 @@
     user-select: none;
 }
 
-.header {
-    height: var(--navbar-height);
-    padding: 0.5rem 1rem;
-
-    backdrop-filter: blur(5px);
-    background-color: var(--navbar-background);
-    box-shadow: var(--header-shadow);
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 1rem;
-}
-
-.headerIcon {
-    font-size: 24px;
-}
-
-.profile {
-    height: 32px;
-    width: 32px;
-
-    background-color: var(--black);
-    border-radius: 50%;
-}
-
-.headerIcon,
-.profile {
-    cursor: pointer;
-}
-
 .bars {
     display: flex;
     flex-direction: column;
