@@ -176,8 +176,6 @@ const Editor = ({ id }) => {
     return (
         <div className={styles.main}>
             <LeftSidebar />
-            <div className={styles.center}>
-                <div className={styles.centerHeader}></div>
                 <div className={styles.container}>
                     <Title
                         titleName={title}
@@ -208,7 +206,7 @@ const Editor = ({ id }) => {
                         })}
                     </div>
                 </div>
-            </div>
+
             <RightSidebar />
         </div>
     );
