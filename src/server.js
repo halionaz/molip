@@ -38,10 +38,10 @@ const pageSchema = new mongoose.Schema({
     emoji: String,
     title: String,
     content: String,
-    parentsID: {
-        type: ObjectId,
-        ref: "Page"
-    },
+    // parentsID: {
+    //     type: ObjectId,
+    //     ref: "Page"
+    // },
 });
 
 // 게시물 모델 생성
@@ -61,25 +61,35 @@ app.get("/pages", async (req, res) => {
 });
 
 // GET /pages/:pageID
+app.get("/pages/:pid", async (req, res) => {
+    try{
+        const result = await PAGES_DB.find({_id : req.params.pid});
+        res.json(result);
+    } catch (err){
+        console.error(err);
+        res.status(500).json({error: "Internal Server Error" })
+    }
+})
 
 // POST /pages
 // 페이지 추가
 app.post("/pages", async (req, res) => {
     try {
-        console.log(req.body);
         // PAGES_DB 컬렉션에 데이터를 insert
         const page = await PAGES_DB.create({
             emoji : req.body.emoji, // 페이지 타이틀 이모지
             title : req.body.title,
             content : req.body.content,
         })
-        console.log(page);
         res.status(201).json(page);
     } catch ( err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 })
+
+// PATCH /pages/:pid
+// app.pat
 
 // const corsOption = {
 //     origin : "http://localhost:3000"
