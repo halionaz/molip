@@ -13,17 +13,20 @@ const conn_str = process.env.DB_CONNECTION_STRING;
 
 // 미들웨어
 app.use(express.json());
-app.use(express.urlencoded( {extended : false } ));
+app.use(express.urlencoded({ extended: false }));
 
 // CONNECT TO MONGODB SERVER
-mongoose.connect(conn_str, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=>{
-    console.log("🎉 Success MongoDB Connect");
-}).catch((err) => {
-    console.error(err);
-});
+mongoose
+    .connect(conn_str, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => {
+        console.log("🎉 Success MongoDB Connect");
+    })
+    .catch((err) => {
+        console.error(err);
+    });
 
 const db = mongoose.connection;
 
@@ -47,7 +50,7 @@ const pageSchema = new mongoose.Schema({
 // 게시물 모델 생성
 const PAGES_DB = mongoose.model("Page", pageSchema);
 
-// GET /pages 
+// GET /pages
 // 전체 페이지 조회
 app.get("/pages", async (req, res) => {
     try {
@@ -60,16 +63,17 @@ app.get("/pages", async (req, res) => {
     }
 });
 
-// GET /pages/:pageID
+// GET /pages/:pid
+// 특정 페이지 조회
 app.get("/pages/:pid", async (req, res) => {
-    try{
-        const result = await PAGES_DB.find({_id : req.params.pid});
+    try {
+        const result = await PAGES_DB.find({ _id: req.params.pid });
         res.json(result);
-    } catch (err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error: "Internal Server Error" })
+        res.status(500).json({ error: "Internal Server Error" });
     }
-})
+});
 
 // POST /pages
 // 페이지 추가
@@ -77,19 +81,48 @@ app.post("/pages", async (req, res) => {
     try {
         // PAGES_DB 컬렉션에 데이터를 insert
         const page = await PAGES_DB.create({
-            emoji : req.body.emoji, // 페이지 타이틀 이모지
-            title : req.body.title,
-            content : req.body.content,
-        })
+            emoji: req.body.emoji, // 페이지 타이틀 이모지
+            title: req.body.title,
+            content: req.body.content,
+        });
         res.status(201).json(page);
-    } catch ( err) {
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: "Internal Server Error" });
     }
-})
+});
 
-// PATCH /pages/:pid
-// app.pat
+// PUT /pages/:pid
+// 페이지 수정
+app.put("/pages/:pid", async (req, res) => {
+    try {
+        const result = await PAGES_DB.findOneAndUpdate({
+            _id: req.params.pid,
+        },{
+            emoji: req.body.emoji,
+            title: req.body.title,
+            content: req.body.content,
+        });
+        res.json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// DELETE /pages/:pid
+// 페이지 삭제
+app.delete("/pages/:pid", async (req, res) => {
+    try {
+        const result = await PAGES_DB.deleteOne({
+            _id: req.params.pid,
+        });
+        res.json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 // const corsOption = {
 //     origin : "http://localhost:3000"
