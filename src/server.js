@@ -77,7 +77,7 @@ app.get("/pages/:pid", async (req, res) => {
         const result = await PAGES_DB.find({ _id: req.params.pid });
         res.json(result);
     } catch (err) {
-        console.error(err);
+        console.log(`없는 페이지 접속, 리다이렉트`);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
