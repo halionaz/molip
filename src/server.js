@@ -15,6 +15,13 @@ const conn_str = process.env.DB_CONNECTION_STRING;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const corsOption = {
+    origin : "http://localhost:3000"
+};
+
+// Set CORS option
+app.use(cors(corsOption));
+
 // CONNECT TO MONGODB SERVER
 mongoose
     .connect(conn_str, {
@@ -123,17 +130,6 @@ app.delete("/pages/:pid", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
-// const corsOption = {
-//     origin : "http://localhost:3000"
-// };
-
-// // Set CORS option
-// app.use(cors(corsOption));
-
-// app.get("/", (req, res) => {
-//     res.json({message : `Server is running on port ${port}`});
-// })
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
