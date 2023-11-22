@@ -33,7 +33,9 @@ const Editor = ({ data }) => {
     const [saving, setSaving] = useState(false);
     const prevBlocks = usePrevious(blocks);
 
-    const [lastSaveBlocks, setLastSaveBlocks] = useState(JSON.parse(data.content));
+    const [lastSaveBlocks, setLastSaveBlocks] = useState(
+        JSON.parse(data.content)
+    );
     const [canSave, setCanSave] = useState(false);
 
     useEffect(() => {
@@ -157,44 +159,53 @@ const Editor = ({ data }) => {
 
     const savePageHandler = () => {
         // 저장해야함
-        console.log("저장");
+        fetch(`http://localhost:3001/pages/${data._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+                emoji: emoji,
+                title: title,
+                content: JSON.stringify(blocks),
+            }),
+        });
         setLastSaveBlocks(blocks);
     };
 
     return (
         <div className={styles.main}>
             <LeftSidebar />
-                <div className={styles.container}>
-                    <Title
-                        titleName={title}
-                        emoji={emoji}
-                        setTitle={setTitle}
-                        setEmoji={setEmoji}
-                        canSave={canSave}
-                    />
-                    <div className={styles.editor}>
-                        {blocks.map((block, key) => {
-                            const pos =
-                                blocks.map((b) => b.id).indexOf(block.id) + 1;
-                            return (
-                                <EditableBlock
-                                    key={key}
-                                    position={pos}
-                                    id={block.id}
-                                    tag={block.tag}
-                                    html={block.html}
-                                    addBlock={addBlockHandler}
-                                    deleteBlock={deleteBlockHandler}
-                                    updateEditor={updateEditorHandler}
-                                    setCaretToTagChangedBlock={
-                                        setCaretToTagChangedBlock
-                                    }
-                                />
-                            );
-                        })}
-                    </div>
+            <div className={styles.container}>
+                <Title
+                    titleName={title}
+                    emoji={emoji}
+                    setTitle={setTitle}
+                    setEmoji={setEmoji}
+                    canSave={canSave}
+                />
+                <div className={styles.editor}>
+                    {blocks.map((block, key) => {
+                        const pos =
+                            blocks.map((b) => b.id).indexOf(block.id) + 1;
+                        return (
+                            <EditableBlock
+                                key={key}
+                                position={pos}
+                                id={block.id}
+                                tag={block.tag}
+                                html={block.html}
+                                addBlock={addBlockHandler}
+                                deleteBlock={deleteBlockHandler}
+                                updateEditor={updateEditorHandler}
+                                setCaretToTagChangedBlock={
+                                    setCaretToTagChangedBlock
+                                }
+                            />
+                        );
+                    })}
                 </div>
-
+            </div>
             <RightSidebar />
         </div>
     );

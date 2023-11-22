@@ -14,7 +14,7 @@ const Page = ({ params }) => {
     const router = useRouter();
     useEffect(() => {
         fetch(`http://localhost:3001/pages/${pageID}`, {
-            cache: "no-store",
+            cache: "no-cache",
         })
             .then((val) => {
                 return val.json();
@@ -24,7 +24,6 @@ const Page = ({ params }) => {
                     router.push("/");
                 } else {
                     setData(val[0]);
-                    console.log(val);
                     setLoading(false);
                 }
             });
