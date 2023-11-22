@@ -22,18 +22,18 @@ const initialBlock = {
     html: "",
 };
 
-const Editor = ({ id }) => {
+const Editor = ({ data }) => {
     // DB에서 받아와야하는 녀석들
-    const [emoji, setEmoji] = useState("");
-    const [title, setTitle] = useState("");
-    const [blocks, setBlocks] = useState([initialBlock]);
+    const [emoji, setEmoji] = useState(data.emoji);
+    const [title, setTitle] = useState(data.title);
+    const [blocks, setBlocks] = useState(JSON.parse(data.content));
 
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const [saving, setSaving] = useState(false);
     const prevBlocks = usePrevious(blocks);
 
-    const [lastSaveBlocks, setLastSaveBlocks] = useState(null);
+    const [lastSaveBlocks, setLastSaveBlocks] = useState(JSON.parse(data.content));
     const [canSave, setCanSave] = useState(false);
 
     useEffect(() => {
@@ -45,17 +45,6 @@ const Editor = ({ id }) => {
                 setSaving(true);
             }
         });
-
-        const savedData = window.localStorage.getItem(id);
-
-        if (savedData) {
-            const savedBlocks = JSON.parse(savedData);
-            setBlocks(savedBlocks);
-            // 수정 지점 관리
-            setLastSaveBlocks(savedBlocks);
-        } else {
-            setLastSaveBlocks([initialBlock]);
-        }
     }, []);
 
     useEffect(() => {
@@ -169,7 +158,6 @@ const Editor = ({ id }) => {
     const savePageHandler = () => {
         // 저장해야함
         console.log("저장");
-        window.localStorage.setItem(id, JSON.stringify(blocks));
         setLastSaveBlocks(blocks);
     };
 
