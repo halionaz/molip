@@ -2,6 +2,7 @@
 
 // react import
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // utility import
 import uid from "../utility/uid";
@@ -11,10 +12,8 @@ import styles from "./Editor.module.css";
 import EditableBlock from "./Block/EditableBlock";
 import setCaretToEnd from "../utility/setCaretToEnd";
 import usePrevious from "../utility/usePrevious";
-import LeftSidebar from "@/components/Sidebar/LeftSidebar";
-import RightSidebar from "@/components/Sidebar/RightSidebar";
 import Title from "./Block/Title";
-import { useRouter } from "next/navigation";
+import RightSidebar from "@/components/Sidebar/RightSidebar";
 
 // 첫 블럭
 const initialBlock = {
@@ -23,15 +22,13 @@ const initialBlock = {
     html: "",
 };
 
-const Editor = ({ pid }) => {
+const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     // DB에서 받아와야하는 State
     const [emoji, setEmoji] = useState("");
     const [title, setTitle] = useState("");
     const [blocks, setBlocks] = useState([initialBlock]);
-
-    const [pagesList, setPagesList] = useState([]);
 
     const [lastSaveBlocks, setLastSaveBlocks] = useState([initialBlock]);
 
@@ -41,22 +38,6 @@ const Editor = ({ pid }) => {
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const prevBlocks = usePrevious(blocks);
-    
-    const fetchPagesList = async () => {
-        fetch(`http://localhost:3001/pages`, {
-            cache: "no-cache",
-        })
-            .then((val) => {
-                return val.json();
-            })
-            .then((val) => {
-                if (val.error) {
-                    console.error(val.error);
-                } else {
-                    setPagesList(val);
-                }
-            });
-    }
 
     useEffect(() => {
         // On page mount
@@ -199,7 +180,6 @@ const Editor = ({ pid }) => {
             setBlocks(updatedBlocks);
         }
     };
-
     const savePageHandler = () => {
         // 저장해야함
         fetch(`http://localhost:3001/pages/${pid}`, {
@@ -215,12 +195,10 @@ const Editor = ({ pid }) => {
             // 저장 되는 경우, 제목이 바뀔 수도 있으므로 pages list 업데이트
         }).then(fetchPagesList);
         setLastSaveBlocks(blocks);
-
     };
 
     return (
-        <div className={styles.main}>
-            <LeftSidebar pid={pid} pagesList={pagesList} />
+        <>
             <div className={styles.container}>
                 {!loading && (
                     <>
@@ -257,7 +235,7 @@ const Editor = ({ pid }) => {
                 )}
             </div>
             <RightSidebar />
-        </div>
+        </>
     );
 };
 
