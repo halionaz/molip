@@ -41,6 +41,22 @@ const Editor = ({ pid }) => {
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const prevBlocks = usePrevious(blocks);
+    
+    const fetchPagesList = async () => {
+        fetch(`http://localhost:3001/pages`, {
+            cache: "no-cache",
+        })
+            .then((val) => {
+                return val.json();
+            })
+            .then((val) => {
+                if (val.error) {
+                    console.error(val.error);
+                } else {
+                    setPagesList(val);
+                }
+            });
+    }
 
     useEffect(() => {
         // On page mount
@@ -73,19 +89,7 @@ const Editor = ({ pid }) => {
             });
 
         // Pages List Server Fatch
-        fetch(`http://localhost:3001/pages`, {
-            cache: "no-cache",
-        })
-            .then((val) => {
-                return val.json();
-            })
-            .then((val) => {
-                if (val.error) {
-                    console.error(val.error);
-                } else {
-                    setPagesList(val);
-                }
-            });
+        fetchPagesList();
     }, []);
 
     useEffect(() => {
@@ -208,8 +212,10 @@ const Editor = ({ pid }) => {
                 title: title,
                 content: JSON.stringify(blocks),
             }),
-        });
+            // 저장 되는 경우, 제목이 바뀔 수도 있으므로 pages list 업데이트
+        }).then(fetchPagesList);
         setLastSaveBlocks(blocks);
+
     };
 
     return (
