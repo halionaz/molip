@@ -39,7 +39,7 @@ const Page = ({ params }) => {
     return (
         <div className={styles.page}>
             <div className={styles.main}>
-                <LeftSidebar pid={pid} pagesList={pagesList} />
+                <LeftSidebar pid={pid} pagesList={pagesList} fetchPagesList={fetchPagesList} />
                 <Editor pid={pid} fetchPagesList={fetchPagesList} />
             </div>
         </div>

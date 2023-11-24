@@ -7,7 +7,7 @@ import {
 } from "react-icons/go";
 import PageBtn from "../Button/PageBtn/PageBtn";
 
-const LeftSidebar = ({ pid, pagesList }) => {
+const LeftSidebar = ({ pid, pagesList, fetchPagesList }) => {
     return (
         <div className={styles.container}>
             <nav className={styles.sidebar}>
@@ -30,7 +30,7 @@ const LeftSidebar = ({ pid, pagesList }) => {
                     </div>
                     <div className={styles.subBar}>
                         {pagesList.map((page, id) => {
-                            return <PageBtn key={id} data={page} pid={pid} />
+                            return <PageBtn key={id} data={page} pid={pid} fetchPagesList={fetchPagesList} />
                         })}
                     </div>
                 </div>

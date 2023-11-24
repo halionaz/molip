@@ -15,22 +15,15 @@ import usePrevious from "@/components/utility/usePrevious";
 import Title from "@/components/Editor/Block/Title";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
 
-// 첫 블럭
-const initialBlock = {
-    id: uid(),
-    tag: "p",
-    html: "",
-};
-
 const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     // DB에서 받아와야하는 State
     const [emoji, setEmoji] = useState("");
     const [title, setTitle] = useState("");
-    const [blocks, setBlocks] = useState([initialBlock]);
+    const [blocks, setBlocks] = useState([]);
 
-    const [lastSaveBlocks, setLastSaveBlocks] = useState([initialBlock]);
+    const [lastSaveBlocks, setLastSaveBlocks] = useState([]);
 
     // Editor 관련 State
     const [curBlockID, setCurBlockID] = useState(null);

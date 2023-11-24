@@ -20,10 +20,6 @@
     background-color: #e1e1e1;
 }
 
-.file:hover .btn {
-    visibility: visible;
-}
-
 .fileName {
     flex: 1 1 0;
     margin-left: 0.5rem;
