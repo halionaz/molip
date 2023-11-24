@@ -1,7 +1,11 @@
-import Link from "next/link";
 import styles from "./LeftSidebar.module.css";
 
-import { GoArchive, GoFileDirectory, GoHistory, GoSearch } from "react-icons/go";
+import {
+    GoArchive,
+    GoHistory,
+    GoSearch,
+} from "react-icons/go";
+import PageBtn from "../Button/PageBtn/PageBtn";
 
 const LeftSidebar = ({ pid, pagesList }) => {
     return (
@@ -26,36 +30,7 @@ const LeftSidebar = ({ pid, pagesList }) => {
                     </div>
                     <div className={styles.subBar}>
                         {pagesList.map((page, id) => {
-                            return page.type === "page" ? (
-                                <Link key={id} href={`/p/${page._id}`}>
-                                    <div
-                                        className={[
-                                            styles.file,
-                                            page._id === pid
-                                                ? styles.thisFile
-                                                : null,
-                                        ].join(" ")}
-                                    >
-                                        <div className={styles.fileIcon}>
-                                            {page.emoji}
-                                        </div>
-                                        <span className={styles.fileName}>
-                                            {page.title}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ) : (
-                                <div
-                                    className={[
-                                        styles.file
-                                    ].join(" ")}
-                                >
-                                    <GoFileDirectory />
-                                    <span className={styles.fileName}>
-                                        {page.title}
-                                    </span>
-                                </div>
-                            );
+                            return <PageBtn key={id} data={page} pid={pid} />
                         })}
                     </div>
                 </div>

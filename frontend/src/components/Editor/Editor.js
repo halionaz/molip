@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 // utility import
-import uid from "../utility/uid";
+import uid from "@/components/utility/uid";
 
 // component import
 import styles from "./Editor.module.css";
-import EditableBlock from "./Block/EditableBlock";
-import setCaretToEnd from "../utility/setCaretToEnd";
-import usePrevious from "../utility/usePrevious";
-import Title from "./Block/Title";
+import EditableBlock from "@/components/Editor/Block/EditableBlock";
+import setCaretToEnd from "@/components/utility/setCaretToEnd";
+import usePrevious from "@/components/utility/usePrevious";
+import Title from "@/components/Editor/Block/Title";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
 
 // 첫 블럭
