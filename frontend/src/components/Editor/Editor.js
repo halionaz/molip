@@ -14,6 +14,7 @@ import usePrevious from "../utility/usePrevious";
 import LeftSidebar from "@/components/Sidebar/LeftSidebar";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
 import Title from "./Block/Title";
+import { useRouter } from "next/navigation";
 
 // 첫 블럭
 const initialBlock = {
@@ -22,31 +23,51 @@ const initialBlock = {
     html: "",
 };
 
-const Editor = ({ data }) => {
+const Editor = ({ pid }) => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
     // DB에서 받아와야하는 녀석들
-    const [emoji, setEmoji] = useState(data.emoji);
-    const [title, setTitle] = useState(data.title);
-    const [blocks, setBlocks] = useState(JSON.parse(data.content));
+    const [emoji, setEmoji] = useState("");
+    const [title, setTitle] = useState("");
+    const [blocks, setBlocks] = useState([initialBlock]);
 
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const [saving, setSaving] = useState(false);
     const prevBlocks = usePrevious(blocks);
 
-    const [lastSaveBlocks, setLastSaveBlocks] = useState(
-        JSON.parse(data.content)
-    );
+    const [lastSaveBlocks, setLastSaveBlocks] = useState([initialBlock]);
     const [canSave, setCanSave] = useState(false);
 
     useEffect(() => {
         // On page mount
 
+        // Ctrl + S 구현
         document.addEventListener("keydown", (event) => {
             if ((event.metaKey || event.ctrlKey) && event.key === "s") {
                 event.preventDefault();
                 setSaving(true);
             }
         });
+
+        // Page Contents Sever Fatch
+        fetch(`http://localhost:3001/pages/${pid}`, {
+            cache: "no-cache",
+        })
+            .then((val) => {
+                return val.json();
+            })
+            .then((val) => {
+                if (val.error) {
+                    router.push("/");
+                } else {
+                    setEmoji(val[0].emoji);
+                    setTitle(val[0].title);
+                    setBlocks(JSON.parse(val[0].content));
+                    setLastSaveBlocks(JSON.parse(val[0].content));
+                    setLoading(false);
+                }
+            });
     }, []);
 
     useEffect(() => {
@@ -159,7 +180,7 @@ const Editor = ({ data }) => {
 
     const savePageHandler = () => {
         // 저장해야함
-        fetch(`http://localhost:3001/pages/${data._id}`, {
+        fetch(`http://localhost:3001/pages/${pid}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -177,34 +198,39 @@ const Editor = ({ data }) => {
         <div className={styles.main}>
             <LeftSidebar />
             <div className={styles.container}>
-                <Title
-                    titleName={title}
-                    emoji={emoji}
-                    setTitle={setTitle}
-                    setEmoji={setEmoji}
-                    canSave={canSave}
-                />
-                <div className={styles.editor}>
-                    {blocks.map((block, key) => {
-                        const pos =
-                            blocks.map((b) => b.id).indexOf(block.id) + 1;
-                        return (
-                            <EditableBlock
-                                key={key}
-                                position={pos}
-                                id={block.id}
-                                tag={block.tag}
-                                html={block.html}
-                                addBlock={addBlockHandler}
-                                deleteBlock={deleteBlockHandler}
-                                updateEditor={updateEditorHandler}
-                                setCaretToTagChangedBlock={
-                                    setCaretToTagChangedBlock
-                                }
-                            />
-                        );
-                    })}
-                </div>
+                {!loading && (
+                    <>
+                        <Title
+                            titleName={title}
+                            emoji={emoji}
+                            setTitle={setTitle}
+                            setEmoji={setEmoji}
+                            canSave={canSave}
+                        />
+                        <div className={styles.editor}>
+                            {blocks.map((block, key) => {
+                                const pos =
+                                    blocks.map((b) => b.id).indexOf(block.id) +
+                                    1;
+                                return (
+                                    <EditableBlock
+                                        key={key}
+                                        position={pos}
+                                        id={block.id}
+                                        tag={block.tag}
+                                        html={block.html}
+                                        addBlock={addBlockHandler}
+                                        deleteBlock={deleteBlockHandler}
+                                        updateEditor={updateEditorHandler}
+                                        setCaretToTagChangedBlock={
+                                            setCaretToTagChangedBlock
+                                        }
+                                    />
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
             </div>
             <RightSidebar />
         </div>
