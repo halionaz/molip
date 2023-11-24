@@ -68,9 +68,6 @@ const Editor = ({ pid, fetchPagesList }) => {
                     setLoading(false);
                 }
             });
-
-        // Pages List Server Fatch
-        fetchPagesList();
     }, []);
 
     useEffect(() => {
@@ -181,7 +178,7 @@ const Editor = ({ pid, fetchPagesList }) => {
         }
     };
     const savePageHandler = () => {
-        // 저장해야함
+        // 페이지 내용 저장
         fetch(`http://localhost:3001/pages/${pid}`, {
             method: "PUT",
             headers: {

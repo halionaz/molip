@@ -6,7 +6,7 @@ Using MongoDB
 - ACCOUNT TABLE
 :: userID, userName, userMail
 - PAGE TABLE
-:: pid, pemoji, ptitle, pcontents, (parentsPID), (phistory), (accessAvailable)
+:: pid, ptype, pemoji, ptitle, pcontents, parentsPID, (phistory), (accessAvailable)
 
 ## API & ENDPOINT
 

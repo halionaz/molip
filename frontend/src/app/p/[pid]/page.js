@@ -3,7 +3,7 @@
 "use client";
 
 // react import
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // component import
 import styles from "./Page.module.css";
@@ -13,6 +13,11 @@ import Editor from "@/components/Editor/Editor";
 const Page = ({ params }) => {
     const pid = params.pid;
     const [pagesList, setPagesList] = useState([]);
+
+    useEffect(() => {
+        // Pages List Server Fatch
+        fetchPagesList();
+    }, []);
 
     const fetchPagesList = async () => {
         // 서버에서 페이지 리스트 받아오는 함수

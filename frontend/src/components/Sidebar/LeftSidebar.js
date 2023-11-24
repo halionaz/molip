@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "./LeftSidebar.module.css";
 
-import { GoArchive, GoFile, GoHistory, GoSearch } from "react-icons/go";
+import { GoArchive, GoFileDirectory, GoHistory, GoSearch } from "react-icons/go";
 
 const LeftSidebar = ({ pid, pagesList }) => {
     return (
@@ -26,7 +26,7 @@ const LeftSidebar = ({ pid, pagesList }) => {
                     </div>
                     <div className={styles.subBar}>
                         {pagesList.map((page, id) => {
-                            return (
+                            return page.type === "page" ? (
                                 <Link key={id} href={`/p/${page._id}`}>
                                     <div
                                         className={[
@@ -44,6 +44,17 @@ const LeftSidebar = ({ pid, pagesList }) => {
                                         </span>
                                     </div>
                                 </Link>
+                            ) : (
+                                <div
+                                    className={[
+                                        styles.file
+                                    ].join(" ")}
+                                >
+                                    <GoFileDirectory />
+                                    <span className={styles.fileName}>
+                                        {page.title}
+                                    </span>
+                                </div>
                             );
                         })}
                     </div>

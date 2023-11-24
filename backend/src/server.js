@@ -45,13 +45,14 @@ db.once("open", () => {
 
 // 게시물 스키마 정의
 const pageSchema = new mongoose.Schema({
+    type: String,
     emoji: String,
     title: String,
     content: String,
-    // parentsID: {
-    //     type: ObjectId,
-    //     ref: "Page"
-    // },
+    parent_ID: {
+        type: ObjectId,
+        ref: "Page"
+    },
 });
 
 // 게시물 모델 생성
@@ -63,7 +64,7 @@ app.get("/pages", async (req, res) => {
     try {
         // pages 컬렉션 모두 가져오기
         // 빠른 전송을 위해 각 페이지의 content는 생략
-        const pages = await PAGES_DB.find().select("_id emoji title");
+        const pages = await PAGES_DB.find().select("_id type emoji title");
         res.json(pages);
     } catch (err) {
         console.error(err);
@@ -89,6 +90,7 @@ app.post("/pages", async (req, res) => {
     try {
         // PAGES_DB 컬렉션에 데이터를 insert
         const page = await PAGES_DB.create({
+            type: req.body.type,
             emoji: req.body.emoji, // 페이지 타이틀 이모지
             title: req.body.title,
             content: req.body.content,
