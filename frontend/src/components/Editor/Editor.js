@@ -51,7 +51,7 @@ const Editor = ({ pid, fetchPagesList }) => {
                 return val.json();
             })
             .then((val) => {
-                if (val.error) {
+                if (val.length === 0 || val.error) {
                     router.push("/");
                 } else {
                     setEmoji(val[0].emoji);

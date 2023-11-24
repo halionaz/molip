@@ -51,7 +51,7 @@ const pageSchema = new mongoose.Schema({
     content: String,
     parent_ID: {
         type: ObjectId,
-        ref: "Page"
+        ref: "Page",
     },
 });
 
@@ -95,7 +95,7 @@ app.post("/pages", async (req, res) => {
             title: req.body.title,
             content: req.body.content,
         });
-        res.status(201).json(page);
+        res.status(201).json({ type: page.type, _id: page._id });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Internal Server Error" });
