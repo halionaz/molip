@@ -1,9 +1,9 @@
+import Link from "next/link";
 import styles from "./LeftSidebar.module.css";
 
 import { GoArchive, GoFile, GoHistory, GoSearch } from "react-icons/go";
 
 const LeftSidebar = ({ pid, pagesList }) => {
-    console.log(pid, pagesList);
     return (
         <div className={styles.container}>
             <nav className={styles.sidebar}>
@@ -27,12 +27,23 @@ const LeftSidebar = ({ pid, pagesList }) => {
                     <div className={styles.subBar}>
                         {pagesList.map((page, id) => {
                             return (
-                                <div key={id} className={[styles.file, (page._id === pid ? styles.thisFile : null)].join(" ")}>
-                                    <GoFile className={styles.fileIcon} />
-                                    <span className={styles.fileName}>
-                                        {page.title}
-                                    </span>
-                                </div>
+                                <Link key={id} href={`/p/${page._id}`}>
+                                    <div
+                                        className={[
+                                            styles.file,
+                                            page._id === pid
+                                                ? styles.thisFile
+                                                : null,
+                                        ].join(" ")}
+                                    >
+                                        <div className={styles.fileIcon}>
+                                            {page.emoji}
+                                        </div>
+                                        <span className={styles.fileName}>
+                                            {page.title}
+                                        </span>
+                                    </div>
+                                </Link>
                             );
                         })}
                     </div>
