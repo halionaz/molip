@@ -26,18 +26,21 @@ const initialBlock = {
 const Editor = ({ pid }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    // DB에서 받아와야하는 녀석들
+    // DB에서 받아와야하는 State
     const [emoji, setEmoji] = useState("");
     const [title, setTitle] = useState("");
     const [blocks, setBlocks] = useState([initialBlock]);
 
+    const [pagesList, setPagesList] = useState([]);
+
+    const [lastSaveBlocks, setLastSaveBlocks] = useState([initialBlock]);
+
+    // Editor 관련 State
     const [curBlockID, setCurBlockID] = useState(null);
     const [tagUpdatedBlockID, setTagUpdatedBlockID] = useState(null);
     const [saving, setSaving] = useState(false);
-    const prevBlocks = usePrevious(blocks);
-
-    const [lastSaveBlocks, setLastSaveBlocks] = useState([initialBlock]);
     const [canSave, setCanSave] = useState(false);
+    const prevBlocks = usePrevious(blocks);
 
     useEffect(() => {
         // On page mount
@@ -66,6 +69,21 @@ const Editor = ({ pid }) => {
                     setBlocks(JSON.parse(val[0].content));
                     setLastSaveBlocks(JSON.parse(val[0].content));
                     setLoading(false);
+                }
+            });
+
+        // Pages List Server Fatch
+        fetch(`http://localhost:3001/pages`, {
+            cache: "no-cache",
+        })
+            .then((val) => {
+                return val.json();
+            })
+            .then((val) => {
+                if (val.error) {
+                    console.error(val.error);
+                } else {
+                    setPagesList(val);
                 }
             });
     }, []);
@@ -196,7 +214,7 @@ const Editor = ({ pid }) => {
 
     return (
         <div className={styles.main}>
-            <LeftSidebar />
+            <LeftSidebar pid={pid} pagesList={pagesList} />
             <div className={styles.container}>
                 {!loading && (
                     <>

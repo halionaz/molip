@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const corsOption = {
-    origin : "http://localhost:3000"
+    origin: "http://localhost:3000",
 };
 
 // Set CORS option
@@ -62,7 +62,8 @@ const PAGES_DB = mongoose.model("Page", pageSchema);
 app.get("/pages", async (req, res) => {
     try {
         // pages 컬렉션 모두 가져오기
-        const pages = await PAGES_DB.find();
+        // 빠른 전송을 위해 각 페이지의 content는 생략
+        const pages = await PAGES_DB.find().select("_id emoji title");
         res.json(pages);
     } catch (err) {
         console.error(err);
@@ -103,13 +104,16 @@ app.post("/pages", async (req, res) => {
 // 페이지 수정
 app.put("/pages/:pid", async (req, res) => {
     try {
-        const result = await PAGES_DB.findOneAndUpdate({
-            _id: req.params.pid,
-        },{
-            emoji: req.body.emoji,
-            title: req.body.title,
-            content: req.body.content,
-        });
+        const result = await PAGES_DB.findOneAndUpdate(
+            {
+                _id: req.params.pid,
+            },
+            {
+                emoji: req.body.emoji,
+                title: req.body.title,
+                content: req.body.content,
+            }
+        );
         res.json(result);
     } catch (err) {
         console.error(err);
