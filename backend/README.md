@@ -1,10 +1,18 @@
 # molip-backend
 
-## 백엔드 계획
+Using MongoDB
 
-MongoDB 사용
-
+## DB STRUCTURE
 - ACCOUNT TABLE
 :: userID, userName, userMail
 - PAGE TABLE
-:: pid, pwriter, pemoji, ptitle, pcontents, phistory, parentsPID
+:: pid, pemoji, ptitle, pcontents, (parentsPID), (phistory), (accessAvailable)
+
+## API & ENDPOINT
+
+### /pages
+- GET /pages
+- GET /pages/:pageId
+- POST /pages
+- PUT /pages/:pageId
+- DELETE /pages/:pageId
