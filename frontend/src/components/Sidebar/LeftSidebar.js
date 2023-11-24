@@ -2,7 +2,8 @@ import styles from "./LeftSidebar.module.css";
 
 import { GoArchive, GoFile, GoHistory, GoSearch } from "react-icons/go";
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ pid, pagesList }) => {
+    console.log(pid, pagesList);
     return (
         <div className={styles.container}>
             <nav className={styles.sidebar}>
@@ -24,10 +25,16 @@ const LeftSidebar = () => {
                         </div>
                     </div>
                     <div className={styles.subBar}>
-                        <div className={styles.file}>
-                            <GoFile className={styles.fileIcon} />
-                            <span className={styles.fileName}>테스트 문서</span>
-                        </div>
+                        {pagesList.map((page, id) => {
+                            return (
+                                <div key={id} className={[styles.file, (page._id === pid ? styles.thisFile : null)].join(" ")}>
+                                    <GoFile className={styles.fileIcon} />
+                                    <span className={styles.fileName}>
+                                        {page.title}
+                                    </span>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </nav>
