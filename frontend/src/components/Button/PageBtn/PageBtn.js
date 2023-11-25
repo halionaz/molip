@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 import styles from "./PageBtn.module.css";
-import AddPageBtn from "@/components/Button/AddPageBtn";
+import AddPageBtn from "@/components/Button/PageBtn/AddPageBtn";
 import { GoFile, GoFileDirectory } from "react-icons/go";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import uid from "@/components/utility/uid";
+import DeletePageBtn from "./DeletePageBtn";
 
 const PageBtn = ({ data, pid, fetchPagesList }) => {
     const router = useRouter();
@@ -38,7 +39,7 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                   }
                 : {
                       type: "folder",
-                      title: "",
+                      title: "새 폴더",
                       parentsPID: data._id,
                   };
         fetch("http://localhost:3001/pages", {
@@ -52,13 +53,21 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                 return val.json();
             })
             .then((val) => {
-                if(val.type === "page"){
+                if (val.type === "page") {
                     // 페이지가 생성된거라면 리다이렉트
                     router.push(`/p/${val._id}`);
                 } else {
                     fetchPagesList();
                 }
             });
+    };
+
+    const DeletePage = () => {
+        fetch(`http://localhost:3001/pages/${data._id}`, {
+            method: "DELETE",
+        }).then(() => {
+            fetchPagesList();
+        });
     };
 
     if (data.type === "page") {
@@ -72,8 +81,13 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                     onMouseOver={mouseOverHandler}
                     onMouseOut={mouseOutHandler}
                 >
-                    <div className={styles.fileIcon}>{data.emoji ? data.emoji : <GoFile />}</div>
-                    <span className={styles.fileName}>{data.title ? data.title : "제목 없음"}</span>
+                    <div className={styles.fileIcon}>
+                        {data.emoji ? data.emoji : <GoFile />}
+                    </div>
+                    <span className={styles.fileName}>
+                        {data.title ? data.title : "제목 없음"}
+                    </span>
+                    <DeletePageBtn hover={hover} DeletePage={DeletePage} />
                     <AddPageBtn type={"page"} hover={hover} AddPage={AddPage} />
                     <AddPageBtn
                         type={"folder"}
@@ -93,6 +107,7 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
             >
                 <GoFileDirectory />
                 <span className={styles.fileName}>{data.title}</span>
+                <DeletePageBtn hover={hover} DeletePage={DeletePage} />
                 <AddPageBtn type={"page"} hover={hover} AddPage={AddPage} />
                 <AddPageBtn type={"folder"} hover={hover} AddPage={AddPage} />
             </div>
