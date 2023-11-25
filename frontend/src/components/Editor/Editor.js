@@ -52,7 +52,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             })
             .then((val) => {
                 if (val.length === 0 || val.error) {
-                    router.push("/");
+                    router.push("/p/655cbf3f3ddee11a74739254");
                 } else {
                     setEmoji(val[0].emoji);
                     setTitle(val[0].title);
