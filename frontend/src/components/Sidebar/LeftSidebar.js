@@ -1,11 +1,7 @@
 import styles from "./LeftSidebar.module.css";
 
-import {
-    GoArchive,
-    GoHistory,
-    GoSearch,
-} from "react-icons/go";
-import PageBtn from "../Button/PageBtn/PageBtn";
+import { GoArchive, GoHistory, GoSearch } from "react-icons/go";
+import TreeExplorer from "./Explorer/TreeExplorer";
 
 const LeftSidebar = ({ pid, pagesList, fetchPagesList }) => {
     return (
@@ -29,9 +25,12 @@ const LeftSidebar = ({ pid, pagesList, fetchPagesList }) => {
                         </div>
                     </div>
                     <div className={styles.subBar}>
-                        {pagesList.map((page, id) => {
-                            return <PageBtn key={id} data={page} pid={pid} fetchPagesList={fetchPagesList} />
-                        })}
+                        <TreeExplorer
+                            pid={pid}
+                            node={null}
+                            data={pagesList}
+                            fetchPagesList={fetchPagesList}
+                        />
                     </div>
                 </div>
             </nav>

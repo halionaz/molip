@@ -64,7 +64,9 @@ app.get("/pages", async (req, res) => {
     try {
         // pages 컬렉션 모두 가져오기
         // 빠른 전송을 위해 각 페이지의 content는 생략
-        const pages = await PAGES_DB.find().select("_id type emoji title");
+        const pages = await PAGES_DB.find().select(
+            "_id type emoji title parent_ID"
+        );
         res.json(pages);
     } catch (err) {
         console.error(err);
@@ -94,6 +96,7 @@ app.post("/pages", async (req, res) => {
             emoji: req.body.emoji, // 페이지 타이틀 이모지
             title: req.body.title,
             content: req.body.content,
+            parent_ID: req.body.parentsPID,
         });
         res.status(201).json({ type: page.type, _id: page._id });
     } catch (err) {
