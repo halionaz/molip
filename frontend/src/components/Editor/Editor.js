@@ -12,8 +12,9 @@ import styles from "./Editor.module.css";
 import EditableBlock from "@/components/Editor/Block/EditableBlock";
 import setCaretToEnd from "@/components/utility/setCaretToEnd";
 import usePrevious from "@/components/utility/usePrevious";
-import Title from "@/components/Editor/Block/Title";
+import Title from "@/components/Editor/Title";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
+import Header from "./Header";
 
 const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
@@ -192,12 +193,16 @@ const Editor = ({ pid, fetchPagesList }) => {
             <div className={styles.container}>
                 {!loading && (
                     <>
+                        <Header
+                            emoji={emoji}
+                            titleName={title}
+                            canSave={canSave}
+                        />
                         <Title
                             titleName={title}
                             emoji={emoji}
                             setTitle={setTitle}
                             setEmoji={setEmoji}
-                            canSave={canSave}
                         />
                         <div className={styles.editor}>
                             {blocks.map((block, key) => {

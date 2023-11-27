@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    align-items: center;
+    z-index: 50;
+    position: sticky;
+    top: 0;
+    padding: 1rem 0;
+}
+.container{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

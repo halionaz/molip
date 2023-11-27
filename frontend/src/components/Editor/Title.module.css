@@ -1,35 +1,30 @@
-.header{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 50;
-    position: sticky;
-    top: 0;
-    padding-top: 1rem;
-
-}
-.titleBlock{
+.title {
     display: flex;
     flex-direction: column;
     align-items: center;
 
 }
-.title, .titleEmoji{
+
+.title,
+.titleEmoji {
     font-weight: 900;
     font-size: 50px;
     line-height: 120%;
 
     cursor: text;
 }
-.title:focus, .titleEmoji:focus {
+
+.title:focus,
+.titleEmoji:focus {
     outline: 0px solid transparent;
 }
 
-.titleEmoji:empty::before{
+.titleEmoji:empty::before {
     color: var(--placeholder-gray);
     content: "🚧";
 }
-.title:empty::before{
+
+.title:empty::before {
     color: var(--placeholder-gray);
     content: "제목 없음";
 }
