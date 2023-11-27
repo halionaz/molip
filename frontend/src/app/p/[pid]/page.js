@@ -31,7 +31,6 @@ const Page = ({ params }) => {
                 if (val.error) {
                     console.error(val.error);
                 } else {
-                    console.log(val);
                     setPagesList(val);
                 }
             });

@@ -55,7 +55,6 @@ const TagSelector = ({ position, onSelect, close }) => {
                         // 해당하는 태그가 없다면
                         if(!event.shiftKey){
                             // shift + Enter가 아니라면 새로운 블럭 생성
-                            console.log("새 블럭 생성!");
                             event.preventDefault();
                             close();
                         } else {
