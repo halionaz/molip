@@ -24,6 +24,8 @@ const Editor = ({ pid, fetchPagesList }) => {
     const [title, setTitle] = useState("");
     const [blocks, setBlocks] = useState([]);
 
+    const [lastSaveEmoji, setLastSaveEmoji] = useState("");
+    const [lastSaveTitle, setLastSaveTitle] = useState("");
     const [lastSaveBlocks, setLastSaveBlocks] = useState([]);
 
     // Editor 관련 State
@@ -56,7 +58,9 @@ const Editor = ({ pid, fetchPagesList }) => {
                     router.push("/p/655cbf3f3ddee11a74739254");
                 } else {
                     setEmoji(val[0].emoji);
+                    setLastSaveEmoji(val[0].emoji);
                     setTitle(val[0].title);
+                    setLastSaveTitle(val[0].title);
                     setBlocks(JSON.parse(val[0].content));
                     setLastSaveBlocks(JSON.parse(val[0].content));
                     setLoading(false);
@@ -65,13 +69,21 @@ const Editor = ({ pid, fetchPagesList }) => {
     }, []);
 
     useEffect(() => {
-        // 블럭 state가 바뀌면 수정되었다는 상태 표시
+        // 내용 state가 바뀌면 수정되었다는 상태 표시
+        let isChange = false;
         if (lastSaveBlocks) {
-            setCanSave(
-                JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks)
-            );
+            isChange =
+                isChange ||
+                JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks);
         }
-    }, [blocks, lastSaveBlocks]);
+        if (lastSaveEmoji) {
+            isChange = isChange || emoji !== lastSaveEmoji;
+        }
+        if (lastSaveTitle) {
+            isChange = isChange || title !== lastSaveTitle;
+        }
+        setCanSave(isChange);
+    }, [blocks, lastSaveBlocks, emoji, lastSaveEmoji, title, lastSaveTitle]);
 
     useEffect(() => {
         // 블럭이 추가 또는 삭제 되었을 때 키보드 커서 (Caret) 이동 관리 effect
@@ -185,6 +197,8 @@ const Editor = ({ pid, fetchPagesList }) => {
             }),
             // 저장 되는 경우, 제목이 바뀔 수도 있으므로 pages list 업데이트
         }).then(fetchPagesList);
+        setLastSaveEmoji(emoji);
+        setLastSaveTitle(title);
         setLastSaveBlocks(blocks);
     };
 
@@ -194,8 +208,8 @@ const Editor = ({ pid, fetchPagesList }) => {
                 {!loading && (
                     <>
                         <Header
-                            emoji={emoji}
-                            titleName={title}
+                            emoji={lastSaveEmoji}
+                            titleName={lastSaveTitle}
                             canSave={canSave}
                         />
                         <Title

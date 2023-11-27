@@ -2,7 +2,7 @@ import ContentEditable from "@/components/utility/content-editable";
 
 import styles from "./Title.module.css";
 
-const Title = ({ emoji, titleName, setEmoji, setTitle, canSave }) => {
+const Title = ({ emoji, titleName, setEmoji, setTitle }) => {
     return (
         <div className={styles.title}>
             <ContentEditable
