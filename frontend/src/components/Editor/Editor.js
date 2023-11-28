@@ -26,7 +26,7 @@ const Editor = ({ pid, fetchPagesList }) => {
 
     const [lastSaveEmoji, setLastSaveEmoji] = useState("");
     const [lastSaveTitle, setLastSaveTitle] = useState("");
-    const [lastSaveBlocks, setLastSaveBlocks] = useState([]);
+    const [lastSaveBlocks, setLastSaveBlocks] = useState("");
 
     // Editor 관련 State
     const [curBlockID, setCurBlockID] = useState(null);
@@ -62,19 +62,20 @@ const Editor = ({ pid, fetchPagesList }) => {
                     setTitle(val[0].title);
                     setLastSaveTitle(val[0].title);
                     setBlocks(JSON.parse(val[0].content));
-                    setLastSaveBlocks(JSON.parse(val[0].content));
+                    setLastSaveBlocks(val[0].content);
                     setLoading(false);
                 }
             });
     }, []);
 
     useEffect(() => {
-        // 내용 state가 바뀌면 수정되었다는 상태 표시
+        // 내용이 바뀌면 수정되었다는 상태 표시
         let isChange = false;
+
         if (lastSaveBlocks) {
             isChange =
                 isChange ||
-                JSON.stringify(lastSaveBlocks) !== JSON.stringify(blocks);
+                lastSaveBlocks !== JSON.stringify(blocks);
         }
         if (lastSaveEmoji) {
             isChange = isChange || emoji !== lastSaveEmoji;
@@ -82,7 +83,9 @@ const Editor = ({ pid, fetchPagesList }) => {
         if (lastSaveTitle) {
             isChange = isChange || title !== lastSaveTitle;
         }
+
         setCanSave(isChange);
+
     }, [blocks, lastSaveBlocks, emoji, lastSaveEmoji, title, lastSaveTitle]);
 
     useEffect(() => {
@@ -199,7 +202,7 @@ const Editor = ({ pid, fetchPagesList }) => {
         }).then(fetchPagesList);
         setLastSaveEmoji(emoji);
         setLastSaveTitle(title);
-        setLastSaveBlocks(blocks);
+        setLastSaveBlocks(JSON.stringify(blocks));
     };
 
     return (

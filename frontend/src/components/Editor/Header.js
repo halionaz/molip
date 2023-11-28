@@ -6,7 +6,7 @@ const Header = ({ emoji, titleName, canSave }) => {
             <div className={styles.container}>
                 <div className={styles.emoji}>{emoji}</div>
                 <div className={styles.title}>{titleName}</div>
-                {canSave ? "•" : ""}
+                <div className={styles.edited}>{canSave ? "편집됨" : ""}</div>
             </div>
         </div>
     );
