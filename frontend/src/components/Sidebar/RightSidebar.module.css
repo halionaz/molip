@@ -1,6 +1,8 @@
 .container {
     flex: 0 0 20%;
     max-width: 20%;
+    background-color: var(--sidebar-background);
+    border-left: solid 1px var(--solid-border-color);
 }
 
 .sidebar {
@@ -35,7 +37,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f1f1ef;
+    background-color: var(--mainbar-nonselected-background);
 
     cursor: pointer;
 }
@@ -45,7 +47,7 @@
 }
 
 .selected {
-    background-color: var(--default-light-background);
+    background-color: var(--sidebar-background);
 }
 
 .mainBarBtn {

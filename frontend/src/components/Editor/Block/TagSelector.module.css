@@ -7,14 +7,14 @@
 }
 
 .items {
-    background-color: white;
+    background-color: var(--white);
     border-radius: 0.5rem;
     box-shadow: var(--pretty-box-shadow);
 }
 
 .item {
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1px solid var(--solid-border-color);
 }
 
 .item:first-of-type {
@@ -29,9 +29,9 @@
 }
 
 .item:hover {
-    background-color: #F5F6FB;
+    background-color: var(--selector-select-item-color);
 }
 
 .selected {
-    background-color: #F5F6FB;
+    background-color: var(--selector-select-item-color);
 }
