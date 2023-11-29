@@ -88,10 +88,14 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                         {data.title ? data.title : "제목 없음"}
                     </span>
                     <DeletePageBtn hover={hover} DeletePage={DeletePage} />
-                    <AddPageBtn type={"page"} hover={hover} AddPage={AddPage} />
+                    <AddPageBtn
+                        type={"page"}
+                        visible={hover}
+                        AddPage={AddPage}
+                    />
                     <AddPageBtn
                         type={"folder"}
-                        hover={hover}
+                        visible={hover}
                         AddPage={AddPage}
                     />
                 </div>
