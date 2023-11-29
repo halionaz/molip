@@ -16,8 +16,9 @@ const TreeExplorer = ({ pid, node, data, fetchPagesList }) => {
                 return (
                     <div key={childNode._id} style={{paddingLeft : "0.5rem"}}>
                         <PageBtn
-                            data={childNode}
                             pid={pid}
+                            curNode={childNode}
+                            data={data}
                             fetchPagesList={fetchPagesList}
                         />
                         <TreeExplorer

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import uid from "@/components/utility/uid";
 import DeletePageBtn from "./DeletePageBtn";
 
-const PageBtn = ({ data, pid, fetchPagesList }) => {
+const PageBtn = ({ curNode, pid, data, fetchPagesList }) => {
     const router = useRouter();
     const [hover, setHover] = useState(false);
 
@@ -35,12 +35,12 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                               html: "",
                           },
                       ]),
-                      parentsPID: data._id,
+                      parentsPID: curNode._id,
                   }
                 : {
                       type: "folder",
                       title: "새 폴더",
-                      parentsPID: data._id,
+                      parentsPID: curNode._id,
                   };
         fetch("http://localhost:3001/pages", {
             method: "POST",
@@ -62,30 +62,36 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
             });
     };
 
-    const DeletePage = () => {
-        fetch(`http://localhost:3001/pages/${data._id}`, {
+    const DeletePage = (pid = curNode._id) => {
+        // DFS를 통한 자식 페이지들 삭제
+        const childNodes = data.filter((node) => node.parent_ID === pid);
+        childNodes.forEach((child)=>{
+            DeletePage(child._id);
+        })
+        // 페이지 삭제
+        fetch(`http://localhost:3001/pages/${pid}`, {
             method: "DELETE",
         }).then(() => {
             fetchPagesList();
         });
     };
 
-    if (data.type === "page") {
+    if (curNode.type === "page") {
         return (
-            <Link href={`/p/${data._id}`}>
+            <Link href={`/p/${curNode._id}`}>
                 <div
                     className={[
                         styles.file,
-                        data._id === pid ? styles.thisFile : null,
+                        curNode._id === pid ? styles.thisFile : null,
                     ].join(" ")}
                     onMouseOver={mouseOverHandler}
                     onMouseOut={mouseOutHandler}
                 >
                     <div className={styles.fileIcon}>
-                        {data.emoji ? data.emoji : <GoFile />}
+                        {curNode.emoji ? curNode.emoji : <GoFile />}
                     </div>
                     <span className={styles.fileName}>
-                        {data.title ? data.title : "제목 없음"}
+                        {curNode.title ? curNode.title : "제목 없음"}
                     </span>
                     <DeletePageBtn hover={hover} DeletePage={DeletePage} />
                     <AddPageBtn
@@ -110,10 +116,10 @@ const PageBtn = ({ data, pid, fetchPagesList }) => {
                 onMouseOut={mouseOutHandler}
             >
                 <GoFileDirectory />
-                <span className={styles.fileName}>{data.title}</span>
+                <span className={styles.fileName}>{curNode.title}</span>
                 <DeletePageBtn hover={hover} DeletePage={DeletePage} />
-                <AddPageBtn type={"page"} hover={hover} AddPage={AddPage} />
-                <AddPageBtn type={"folder"} hover={hover} AddPage={AddPage} />
+                <AddPageBtn type={"page"} visible={hover} AddPage={AddPage} />
+                <AddPageBtn type={"folder"} visible={hover} AddPage={AddPage} />
             </div>
         );
     }
