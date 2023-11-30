@@ -140,6 +140,16 @@ app.delete("/pages/:pid", async (req, res) => {
     }
 });
 
+// POST /images
+// 이미지 업로드
+app.post("/images", async (req, res) => {
+    try {
+        // 이미지를 업로드해주세요
+    } catch {
+        
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
