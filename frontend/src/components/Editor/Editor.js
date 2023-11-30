@@ -124,7 +124,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             const updatedBlockPos = blocks
                 .map((block) => block.id)
                 .indexOf(tagUpdatedBlockID);
-            if (prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag) {
+            if (updatedBlockPos !== -1 && prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag) {
                 // tag가 바뀌었다면
                 const updatedBlockDOM = document.querySelector(
                     `[data-position="${updatedBlockPos + 1}"]`
