@@ -93,7 +93,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             const nextBlockPos =
                 blocks.map((block) => block.id).indexOf(curBlockID) + 2;
             const nextBlockDOM = document.querySelector(
-                `[data-position="${nextBlockPos}"]`
+                `.data-position-${nextBlockPos}`
             );
             if (nextBlockDOM) {
                 nextBlockDOM.focus();
@@ -105,7 +105,7 @@ const Editor = ({ pid, fetchPagesList }) => {
                 .map((block) => block.id)
                 .indexOf(curBlockID);
             const prevBlockDOM = document.querySelector(
-                `[data-position="${prevBlockPos}"]`
+                `.data-position-${prevBlockPos}`
             );
             if (prevBlockDOM) {
                 setCaretToEnd(prevBlockDOM);
@@ -128,7 +128,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             ) {
                 // tag가 바뀌었다면
                 const updatedBlockDOM = document.querySelector(
-                    `[data-position="${updatedBlockPos + 1}"]`
+                    `.data-position-${updatedBlockPos + 1}`
                 );
                 if (updatedBlockDOM) {
                     setCaretToEnd(updatedBlockDOM);
@@ -243,15 +243,11 @@ const Editor = ({ pid, fetchPagesList }) => {
                                             ref={provided.innerRef}
                                             {...provided.droppableProps}
                                         >
-                                            {blocks.map((block) => {
-                                                const pos =
-                                                    blocks
-                                                        .map((b) => b.id)
-                                                        .indexOf(block.id) + 1;
+                                            {blocks.map((block, ind) => {
                                                 return (
                                                     <EditableBlock
                                                         key={block.id}
-                                                        position={pos}
+                                                        position={ind + 1}
                                                         id={block.id}
                                                         tag={block.tag}
                                                         html={block.html}
