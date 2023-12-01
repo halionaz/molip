@@ -239,7 +239,10 @@ const Editor = ({ pid, fetchPagesList }) => {
                             <DragDropContext onDragEnd={onDragEndHandler}>
                                 <Droppable droppableId={pid}>
                                     {(provided) => (
-                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                        >
                                             {blocks.map((block) => {
                                                 const pos =
                                                     blocks
@@ -252,8 +255,12 @@ const Editor = ({ pid, fetchPagesList }) => {
                                                         id={block.id}
                                                         tag={block.tag}
                                                         html={block.html}
-                                                        addBlock={addBlockHandler}
-                                                        deleteBlock={deleteBlockHandler}
+                                                        addBlock={
+                                                            addBlockHandler
+                                                        }
+                                                        deleteBlock={
+                                                            deleteBlockHandler
+                                                        }
                                                         updateEditor={
                                                             updateEditorHandler
                                                         }

@@ -17,3 +17,8 @@
     color: var(--placeholder-gray);
     content: "/를 눌러 태그 변경";
 }
+
+.draghandler{
+    color: var(--drag-handler-gray);
+    width: 1rem;
+}

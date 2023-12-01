@@ -101,7 +101,10 @@ const EditableBlock = ({
         setCaretToTagChangedBlock(id);
     };
 
-    const onDragHandlerClick = () => {};
+    const onDragHandlerClick = () => {
+        // 줄의 태그 변경, 삭제 제어할 수 있는 창 띄우기
+    };
+
     return (
         <>
             {isTagSelectorOpen && (
@@ -118,6 +121,15 @@ const EditableBlock = ({
                         className={styles.draggable}
                         {...provided.draggableProps}
                     >
+                        <span
+                            role="drag handler button"
+                            tabIndex={0}
+                            className={styles.draghandler}
+                            onClick={onDragHandlerClick}
+                            {...provided.dragHandleProps}
+                        >
+                            <GoGrabber />
+                        </span>
                         <ContentEditable
                             ref={blockRef}
                             data-position={position}
@@ -133,14 +145,6 @@ const EditableBlock = ({
                                 placeholder ? styles.placeholder : null,
                             ].join(" ")}
                         />
-                        <span
-                            role="drag handler button"
-                            tabIndex={0}
-                            onClick={onDragHandlerClick}
-                            {...provided.dragHandleProps}
-                        >
-                            <GoGrabber />
-                        </span>
                     </div>
                 )}
             </Draggable>
