@@ -15,6 +15,7 @@ import usePrevious from "@/components/utility/usePrevious";
 import Title from "@/components/Editor/Title";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
 import Header from "./Header";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
@@ -73,9 +74,7 @@ const Editor = ({ pid, fetchPagesList }) => {
         let isChange = false;
 
         if (lastSaveBlocks) {
-            isChange =
-                isChange ||
-                lastSaveBlocks !== JSON.stringify(blocks);
+            isChange = isChange || lastSaveBlocks !== JSON.stringify(blocks);
         }
         if (lastSaveEmoji) {
             isChange = isChange || emoji !== lastSaveEmoji;
@@ -85,7 +84,6 @@ const Editor = ({ pid, fetchPagesList }) => {
         }
 
         setCanSave(isChange);
-
     }, [blocks, lastSaveBlocks, emoji, lastSaveEmoji, title, lastSaveTitle]);
 
     useEffect(() => {
@@ -124,7 +122,10 @@ const Editor = ({ pid, fetchPagesList }) => {
             const updatedBlockPos = blocks
                 .map((block) => block.id)
                 .indexOf(tagUpdatedBlockID);
-            if (updatedBlockPos !== -1 && prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag) {
+            if (
+                updatedBlockPos !== -1 &&
+                prevBlocks[prevBlockPos].tag !== blocks[updatedBlockPos].tag
+            ) {
                 // tag가 바뀌었다면
                 const updatedBlockDOM = document.querySelector(
                     `[data-position="${updatedBlockPos + 1}"]`
@@ -205,6 +206,19 @@ const Editor = ({ pid, fetchPagesList }) => {
         setLastSaveBlocks(JSON.stringify(blocks));
     };
 
+    const onDragEndHandler = ({ source, destination }) => {
+        // 목적지가 없거나 (droppable 영역 밖으로 드롭핑)
+        // 목적지가 바뀌지 않는다면
+        if (!destination || destination.index === source.index) {
+            return;
+        }
+
+        const updatedBlocks = [...blocks];
+        const removedBlocks = updatedBlocks.splice(source.index - 1, 1);
+        updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0]);
+        setBlocks(updatedBlocks);
+    };
+
     return (
         <>
             <div className={styles.container}>
@@ -222,26 +236,38 @@ const Editor = ({ pid, fetchPagesList }) => {
                             setEmoji={setEmoji}
                         />
                         <div className={styles.editor}>
-                            {blocks.map((block, key) => {
-                                const pos =
-                                    blocks.map((b) => b.id).indexOf(block.id) +
-                                    1;
-                                return (
-                                    <EditableBlock
-                                        key={key}
-                                        position={pos}
-                                        id={block.id}
-                                        tag={block.tag}
-                                        html={block.html}
-                                        addBlock={addBlockHandler}
-                                        deleteBlock={deleteBlockHandler}
-                                        updateEditor={updateEditorHandler}
-                                        setCaretToTagChangedBlock={
-                                            setCaretToTagChangedBlock
-                                        }
-                                    />
-                                );
-                            })}
+                            <DragDropContext onDragEnd={onDragEndHandler}>
+                                <Droppable droppableId={pid}>
+                                    {(provided) => (
+                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                            {blocks.map((block) => {
+                                                const pos =
+                                                    blocks
+                                                        .map((b) => b.id)
+                                                        .indexOf(block.id) + 1;
+                                                return (
+                                                    <EditableBlock
+                                                        key={block.id}
+                                                        position={pos}
+                                                        id={block.id}
+                                                        tag={block.tag}
+                                                        html={block.html}
+                                                        addBlock={addBlockHandler}
+                                                        deleteBlock={deleteBlockHandler}
+                                                        updateEditor={
+                                                            updateEditorHandler
+                                                        }
+                                                        setCaretToTagChangedBlock={
+                                                            setCaretToTagChangedBlock
+                                                        }
+                                                    />
+                                                );
+                                            })}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
                         </div>
                     </>
                 )}

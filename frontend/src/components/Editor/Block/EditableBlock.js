@@ -6,6 +6,8 @@ import styles from "./EditableBlock.module.css";
 import TagSelector from "./TagSelector";
 
 import getSelectorCoord from "@/components/utility/getSelectorCoord";
+import { Draggable } from "@hello-pangea/dnd";
+import { GoGrabber } from "react-icons/go";
 
 const EditableBlock = ({
     position,
@@ -99,6 +101,7 @@ const EditableBlock = ({
         setCaretToTagChangedBlock(id);
     };
 
+    const onDragHandlerClick = () => {};
     return (
         <>
             {isTagSelectorOpen && (
@@ -108,21 +111,39 @@ const EditableBlock = ({
                     onSelect={applyTag}
                 />
             )}
-            <ContentEditable
-                ref={blockRef}
-                data-position={position}
-                tagName={tag}
-                html={html}
-                onChange={onChange}
-                onKeyDown={onKeyDown}
-                onKeyUp={onKeyUp}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                className={[
-                    styles.block,
-                    placeholder ? styles.placeholder : null,
-                ].join(" ")}
-            />
+            <Draggable draggableId={id} index={position}>
+                {(provided, snapshot) => (
+                    <div
+                        ref={provided.innerRef}
+                        className={styles.draggable}
+                        {...provided.draggableProps}
+                    >
+                        <ContentEditable
+                            ref={blockRef}
+                            data-position={position}
+                            tagName={tag}
+                            html={html}
+                            onChange={onChange}
+                            onKeyDown={onKeyDown}
+                            onKeyUp={onKeyUp}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                            className={[
+                                styles.block,
+                                placeholder ? styles.placeholder : null,
+                            ].join(" ")}
+                        />
+                        <span
+                            role="drag handler button"
+                            tabIndex={0}
+                            onClick={onDragHandlerClick}
+                            {...provided.dragHandleProps}
+                        >
+                            <GoGrabber />
+                        </span>
+                    </div>
+                )}
+            </Draggable>
         </>
     );
 };
