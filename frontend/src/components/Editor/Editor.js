@@ -221,7 +221,7 @@ const Editor = ({ pid, fetchPagesList }) => {
 
     return (
         <>
-            <div className={styles.container}>
+            <div className={styles.container} spellCheck={false}>
                 {!loading && (
                     <>
                         <Header

@@ -19,6 +19,7 @@ const Title = ({ emoji, titleName, setEmoji, setTitle }) => {
                 tagName={"h1"}
             />
             <ContentEditable
+                className={styles.titleName}
                 tagName={"h1"}
                 html={titleName}
                 onChange={(event) => {
@@ -29,7 +30,6 @@ const Title = ({ emoji, titleName, setEmoji, setTitle }) => {
                         // 컨텐츠 블럭의 첫 줄로 Caret 옮기기
                     }
                 }}
-                className={styles.title}
             />
         </div>
     );

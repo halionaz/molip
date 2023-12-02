@@ -1,9 +1,10 @@
-.draggable{
+.draggable {
     display: flex;
     align-items: center;
 }
+
 .block {
-    padding: 8px;
+    padding: 4px 8px;
     border-radius: 6px;
     cursor: text;
     flex: 1 1 0;
@@ -13,12 +14,57 @@
     outline: 0px solid transparent;
 }
 
-.placeholder:empty::before{
+.placeholder:empty::before {
     color: var(--placeholder-gray);
     content: "/를 눌러 태그 변경";
 }
 
-.draghandler{
+.draghandler {
     color: var(--drag-handler-gray);
     width: 1rem;
+}
+
+/* 사용자가 쓰게 되는 문서의 CSS 속성 */
+
+.block {
+    color: var(--editor-text-color);
+}
+
+.data-tagblock-h1 {
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 150%;
+
+}
+.data-tagdraggable-h1 {
+    margin-top: 1.5rem;
+}
+
+.data-tagblock-h2 {
+    font-weight: 600;
+    font-size: 1.875rem;
+    line-height: 130%;
+}
+.data-tagdraggable-h2{
+    margin-top: 1rem;
+}
+
+.data-tagblock-h3 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 130%;
+}
+.data-tagdraggable-h3{
+    margin-top: 0.5rem;
+}
+
+.data-tagblock-h4 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 130%;
+}
+
+.data-tagblock-p {
+    font-size: 1rem;
+    line-height: 150%;
 }

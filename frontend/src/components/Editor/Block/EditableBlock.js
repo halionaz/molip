@@ -115,10 +115,12 @@ const EditableBlock = ({
                 />
             )}
             <Draggable draggableId={id} index={position}>
-                {(provided, snapshot) => (
+                {(provided) => (
                     <div
                         ref={provided.innerRef}
-                        className={styles.draggable}
+                        className={`${styles.draggable} ${
+                            styles[`data-tagdraggable-${tag}`]
+                        }`}
                         {...provided.draggableProps}
                     >
                         <span
@@ -141,11 +143,12 @@ const EditableBlock = ({
                             onBlur={onBlur}
                             className={[
                                 styles.block,
-                                // 처음엔 data-position이라는 자체 attribution을 이용해 pos를 관리했지만 
+                                styles[`data-tagblock-${tag}`],
+                                // 처음엔 data-position이라는 자체 attribution을 이용해 pos를 관리했지만
                                 // react에서 array state가 변경되었을 시 data-position까지 변경해주는 re-render을 안해주어서
                                 // 줄 관리에 있어서 버그가 속출했음
                                 // 따라서 class로 pos 관리
-                                `data-position-${position}`, 
+                                `data-position-${position}`,
                                 placeholder ? styles.placeholder : null,
                             ].join(" ")}
                         />
