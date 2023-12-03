@@ -48,7 +48,7 @@ const Editor = ({ pid, fetchPagesList }) => {
         });
 
         // Page Contents Sever Fatch
-        fetch(`http://localhost:3001/pages/${pid}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages/${pid}`, {
             cache: "no-cache",
         })
             .then((val) => {
@@ -164,12 +164,23 @@ const Editor = ({ pid, fetchPagesList }) => {
         setBlocks(updatedBlocks);
     };
 
-    const addBlockHandler = (curBlock) => {
+    const addBlockHandler = (curBlock, curCaretPos) => {
         // 블럭 추가 함수
         setCurBlockID(curBlock.id);
-        const newBlock = { id: uid(), tag: "p", html: "" };
+
+        let nextBlockHTML = curBlock.html.slice(curCaretPos);
+
+        // updateEditor({
+        //     id: id,
+        //     tag: tag,
+        //     html: html.slice(0, curCaretPos),
+        // });
+
+        const newBlock = { id: uid(), tag: "p", html: nextBlockHTML };
         const index = blocks.map((block) => block.id).indexOf(curBlock.id);
         const updatedBlocks = [...blocks];
+        // curBlock 내용 수정
+        updatedBlocks[index].html = updatedBlocks[index].html.slice(0, curCaretPos);
         // curBlock 다음에 새로운 빈 블럭 추가
         updatedBlocks.splice(index + 1, 0, newBlock);
         setBlocks(updatedBlocks);
@@ -189,7 +200,7 @@ const Editor = ({ pid, fetchPagesList }) => {
     };
     const savePageHandler = () => {
         // 페이지 내용 저장
-        fetch(`http://localhost:3001/pages/${pid}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages/${pid}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",

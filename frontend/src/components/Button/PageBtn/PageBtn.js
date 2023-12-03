@@ -42,7 +42,7 @@ const PageBtn = ({ curNode, pid, data, fetchPagesList }) => {
                       title: "새 폴더",
                       parentsPID: curNode._id,
                   };
-        fetch("http://localhost:3001/pages", {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -69,7 +69,7 @@ const PageBtn = ({ curNode, pid, data, fetchPagesList }) => {
             DeletePage(child._id);
         })
         // 페이지 삭제
-        fetch(`http://localhost:3001/pages/${pid}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages/${pid}`, {
             method: "DELETE",
         }).then(() => {
             fetchPagesList();

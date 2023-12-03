@@ -21,7 +21,7 @@ const Page = ({ params }) => {
 
     const fetchPagesList = async () => {
         // 서버에서 페이지 리스트 받아오는 함수
-        fetch(`http://localhost:3001/pages`, {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages`, {
             cache: "no-cache",
         })
             .then((val) => {

@@ -32,7 +32,7 @@ const LeftSidebar = ({ pid, pagesList, fetchPagesList }) => {
                       title: "새 폴더",
                       parentsPID: null,
                   };
-        fetch("http://localhost:3001/pages", {
+        fetch(`${process.env.NEXT_PUBLIC_API}/pages`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
