@@ -37,6 +37,7 @@ const Editor = ({ pid, fetchPagesList }) => {
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const prevBlocks = usePrevious(blocks);
+    const [prevBlockEnd, setPrevBlockEnd] = useState(null);
 
     useEffect(() => {
         // On page mount
@@ -98,10 +99,11 @@ const Editor = ({ pid, fetchPagesList }) => {
                 `.data-position-${nextBlockPos}`
             );
             if (nextBlockDOM) {
-                nextBlockDOM.focus();
                 if (nextBlockDOM.firstChild !== null) {
                     // 새로 생긴 블럭에 내용이 있다면
                     setSelection(nextBlockDOM, 0, 0);
+                } else {
+                    nextBlockDOM.focus();
                 }
             }
         }
@@ -114,11 +116,14 @@ const Editor = ({ pid, fetchPagesList }) => {
                 `.data-position-${prevBlockPos}`
             );
             if (prevBlockDOM) {
-                // setSelection(prevBlockDOM, 1, 1);
-                setCaretToEnd(prevBlockDOM);
+                // 원래 그 전 블럭의 끝으로 caret 이동
+                // (만약 블럭 병합인 경우, 원래 그 전 블럭 끝으로 caret 배치)
+                console.log(prevBlockDOM.firstChild);
+                setSelection(prevBlockDOM, 0, prevBlockEnd);
+                // setCaretToEnd(prevBlockDOM);
             }
         }
-    }, [blocks, prevBlocks, curBlockID]);
+    }, [blocks, prevBlocks, curBlockID, prevBlockEnd]);
 
     useEffect(() => {
         // tag가 수정되었을 때 키보드 커서 (Caret) 이동 관리 effect
@@ -174,17 +179,17 @@ const Editor = ({ pid, fetchPagesList }) => {
     const addBlockHandler = (curBlock) => {
         // 블럭 추가 함수
         setCurBlockID(curBlock.id);
-
+        
         const curCaretPos = getCaretPosition();
 
-        const nextBlockHTML = curBlock.html.slice(curCaretPos);
+        const nextBlockHTML = curBlock.html.slice(curCaretPos.endOffset);
         const newBlock = { id: uid(), tag: "p", html: nextBlockHTML };
         const index = blocks.map((block) => block.id).indexOf(curBlock.id);
         const updatedBlocks = [...blocks];
         // curBlock 내용 수정
         updatedBlocks[index].html = updatedBlocks[index].html.slice(
             0,
-            curCaretPos
+            curCaretPos.startOffset
         );
         // curBlock 다음에 새로운 빈 블럭 추가
         updatedBlocks.splice(index + 1, 0, newBlock);
@@ -199,6 +204,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             const index = blocks.map((block) => block.id).indexOf(curBlock.id);
             const updatedBlocks = [...blocks];
             // 전 블럭에 현 블럭 합체
+            setPrevBlockEnd(updatedBlocks[index - 1].html.length);
             updatedBlocks[index - 1].html =
                 updatedBlocks[index - 1].html + updatedBlocks[index].html;
             // curBlock 삭제

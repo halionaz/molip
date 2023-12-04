@@ -9,6 +9,7 @@ import getSelectorCoord from "@/components/utility/getSelectorCoord";
 import { Draggable } from "@hello-pangea/dnd";
 import { GoGrabber } from "react-icons/go";
 import setSelection from "@/components/utility/setSelection";
+import getCaretPosition from "@/components/utility/getCaretPosition";
 
 const EditableBlock = ({
     position,
@@ -42,6 +43,9 @@ const EditableBlock = ({
         //     event.preventDefault();
         //     setSelection(blockRef.current, 0, 1);
         // }
+        if(event.key === "-"){
+            console.log(blockRef.current.childNodes);
+        }
         if (event.key === "/" && !event.shiftKey) {
             setHtmlBackup(html);
         }
@@ -58,9 +62,12 @@ const EditableBlock = ({
             }
         }
         if (event.key === "Backspace") {
-            // 백스페이스 누르면 전 블럭에 병합
-            event.preventDefault();
-            deleteBlock({ id: id, ref: blockRef.current });
+            // 문장의 처음에서 백스페이스 누르면 전 블럭에 병합
+            const caretPos = getCaretPosition();
+            if(caretPos.endOffset === 0 && caretPos.endNode === blockRef.current.firstChild){
+                event.preventDefault();
+                deleteBlock({ id: id, ref: blockRef.current });
+            }
         }
     };
 
