@@ -8,7 +8,6 @@ import TagSelector from "./TagSelector";
 import getSelectorCoord from "@/components/utility/getSelectorCoord";
 import { Draggable } from "@hello-pangea/dnd";
 import { GoGrabber } from "react-icons/go";
-import getCaretPosition from "@/components/utility/getCaretPosition";
 import setSelection from "@/components/utility/setSelection";
 
 const EditableBlock = ({
@@ -38,11 +37,11 @@ const EditableBlock = ({
     };
 
     const onKeyDown = (event) => {
-        if(event.key === "Enter" && event.shiftKey){
-            // 테스트
-            event.preventDefault();
-            setSelection(blockRef.current, 0, 1);
-        }
+        // if(event.key === "Enter" && event.shiftKey){
+        //     // 테스트
+        //     event.preventDefault();
+        //     setSelection(blockRef.current, 0, 1);
+        // }
         if (event.key === "/" && !event.shiftKey) {
             setHtmlBackup(html);
         }
@@ -54,16 +53,14 @@ const EditableBlock = ({
                 if (!event.nativeEvent.isComposing) {
                     // 한글 입력 오류 방지
                     // 한글은 조합되는 문자라 버그가 잦음
-                    addBlock({ id: id, html: html, ref: blockRef.current }, getCaretPosition());
+                    addBlock({ id: id, html: html, ref: blockRef.current });
                 }
             }
         }
         if (event.key === "Backspace") {
-            if (html === "" || html === "<br>") {
-                // 빈 블럭에서 백스페이스 누르면 블럭 삭제
-                event.preventDefault();
-                deleteBlock({ id: id, ref: blockRef.current });
-            }
+            // 백스페이스 누르면 전 블럭에 병합
+            event.preventDefault();
+            deleteBlock({ id: id, ref: blockRef.current });
         }
     };
 

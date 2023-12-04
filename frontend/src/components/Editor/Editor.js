@@ -17,6 +17,7 @@ import RightSidebar from "@/components/Sidebar/RightSidebar";
 import Header from "./Header";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import setSelection from "../utility/setSelection";
+import getCaretPosition from "../utility/getCaretPosition";
 
 const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
@@ -98,7 +99,7 @@ const Editor = ({ pid, fetchPagesList }) => {
             );
             if (nextBlockDOM) {
                 nextBlockDOM.focus();
-                if(nextBlockDOM.firstChild !== null){
+                if (nextBlockDOM.firstChild !== null) {
                     // 새로 생긴 블럭에 내용이 있다면
                     setSelection(nextBlockDOM, 0, 0);
                 }
@@ -170,18 +171,13 @@ const Editor = ({ pid, fetchPagesList }) => {
         setBlocks(updatedBlocks);
     };
 
-    const addBlockHandler = (curBlock, curCaretPos) => {
+    const addBlockHandler = (curBlock) => {
         // 블럭 추가 함수
         setCurBlockID(curBlock.id);
 
-        let nextBlockHTML = curBlock.html.slice(curCaretPos);
+        const curCaretPos = getCaretPosition();
 
-        // updateEditor({
-        //     id: id,
-        //     tag: tag,
-        //     html: html.slice(0, curCaretPos),
-        // });
-
+        const nextBlockHTML = curBlock.html.slice(curCaretPos);
         const newBlock = { id: uid(), tag: "p", html: nextBlockHTML };
         const index = blocks.map((block) => block.id).indexOf(curBlock.id);
         const updatedBlocks = [...blocks];
@@ -202,6 +198,9 @@ const Editor = ({ pid, fetchPagesList }) => {
             setCurBlockID(curBlock.id);
             const index = blocks.map((block) => block.id).indexOf(curBlock.id);
             const updatedBlocks = [...blocks];
+            // 전 블럭에 현 블럭 합체
+            updatedBlocks[index - 1].html =
+                updatedBlocks[index - 1].html + updatedBlocks[index].html;
             // curBlock 삭제
             updatedBlocks.splice(index, 1);
             setBlocks(updatedBlocks);
