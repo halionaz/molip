@@ -16,6 +16,7 @@ import Title from "@/components/Editor/Title";
 import RightSidebar from "@/components/Sidebar/RightSidebar";
 import Header from "./Header";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import setSelection from "../utility/setSelection";
 
 const Editor = ({ pid, fetchPagesList }) => {
     const router = useRouter();
@@ -97,6 +98,10 @@ const Editor = ({ pid, fetchPagesList }) => {
             );
             if (nextBlockDOM) {
                 nextBlockDOM.focus();
+                if(nextBlockDOM.firstChild !== null){
+                    // 새로 생긴 블럭에 내용이 있다면
+                    setSelection(nextBlockDOM, 0, 0);
+                }
             }
         }
         if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
@@ -108,6 +113,7 @@ const Editor = ({ pid, fetchPagesList }) => {
                 `.data-position-${prevBlockPos}`
             );
             if (prevBlockDOM) {
+                // setSelection(prevBlockDOM, 1, 1);
                 setCaretToEnd(prevBlockDOM);
             }
         }
@@ -180,7 +186,10 @@ const Editor = ({ pid, fetchPagesList }) => {
         const index = blocks.map((block) => block.id).indexOf(curBlock.id);
         const updatedBlocks = [...blocks];
         // curBlock 내용 수정
-        updatedBlocks[index].html = updatedBlocks[index].html.slice(0, curCaretPos);
+        updatedBlocks[index].html = updatedBlocks[index].html.slice(
+            0,
+            curCaretPos
+        );
         // curBlock 다음에 새로운 빈 블럭 추가
         updatedBlocks.splice(index + 1, 0, newBlock);
         setBlocks(updatedBlocks);

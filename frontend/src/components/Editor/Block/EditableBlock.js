@@ -9,6 +9,7 @@ import getSelectorCoord from "@/components/utility/getSelectorCoord";
 import { Draggable } from "@hello-pangea/dnd";
 import { GoGrabber } from "react-icons/go";
 import getCaretPosition from "@/components/utility/getCaretPosition";
+import setSelection from "@/components/utility/setSelection";
 
 const EditableBlock = ({
     position,
@@ -37,6 +38,11 @@ const EditableBlock = ({
     };
 
     const onKeyDown = (event) => {
+        if(event.key === "Enter" && event.shiftKey){
+            // 테스트
+            event.preventDefault();
+            setSelection(blockRef.current, 0, 1);
+        }
         if (event.key === "/" && !event.shiftKey) {
             setHtmlBackup(html);
         }
@@ -45,7 +51,6 @@ const EditableBlock = ({
                 // Shift + Enter가 아니고, 태그 셀렉터가 오픈되어 있는 경우가 아니라면
                 // 새로운 블럭 생성
                 event.preventDefault();
-                console.log(`${getCaretPosition()} in ${html.length}`);
                 if (!event.nativeEvent.isComposing) {
                     // 한글 입력 오류 방지
                     // 한글은 조합되는 문자라 버그가 잦음
