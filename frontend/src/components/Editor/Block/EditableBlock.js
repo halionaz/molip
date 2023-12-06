@@ -62,9 +62,10 @@ const EditableBlock = ({
             }
         }
         if (event.key === "Backspace") {
+            // 수정 필요 
             // 문장의 처음에서 백스페이스 누르면 전 블럭에 병합
             const caretPos = getCaretPosition();
-            if(caretPos.endOffset === 0 && caretPos.endNode === blockRef.current.firstChild){
+            if(caretPos.endOffset === 0 && (!blockRef.current.firstChild || caretPos.endNode === blockRef.current.firstChild)){
                 event.preventDefault();
                 deleteBlock({ id: id, ref: blockRef.current });
             }

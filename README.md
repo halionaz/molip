@@ -4,11 +4,21 @@
 
 > The most effective way to save ideas
 
+## 🪵 로그
+
+caret 관련 모든게 오작동
+
+공백을 띄운상태에서 enter치면 &nbsp 발동
+
+편집됨 표시가 줄 공백에 있어서 이상하게 적용됨
+
+(공백 한줄 추가한거 가지고는 편집됨이 뜨지 않음)
+
 ## ⛳️ 이정표
 
 ### 오늘의 이정표
 - [ ] ✨ 폴더 제목 설정창 구현
-- [ ] 🐛 줄바꿈 시 Caret 위치 버그
+- [ ] 🐛 줄바꿈 시 Caret 위치 버그 < getCaretPosition, setSelection으로 caret 관련 함수 이원화
 
 - [ ] 🐛 /를 입력한 상태에서 enter로 블럭이 바뀌지 않는 버그
 - [ ] ✨ 이미지 태그 추가

@@ -90,6 +90,7 @@ const Editor = ({ pid, fetchPagesList }) => {
     }, [blocks, lastSaveBlocks, emoji, lastSaveEmoji, title, lastSaveTitle]);
 
     useEffect(() => {
+        // 수정 필요
         // 블럭이 추가 또는 삭제 되었을 때 키보드 커서 (Caret) 이동 관리 effect
         if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
             // 블럭이 추가됨
@@ -99,12 +100,16 @@ const Editor = ({ pid, fetchPagesList }) => {
                 `.data-position-${nextBlockPos}`
             );
             if (nextBlockDOM) {
-                if (nextBlockDOM.firstChild !== null) {
-                    // 새로 생긴 블럭에 내용이 있다면
-                    setSelection(nextBlockDOM, 0, 0);
-                } else {
+                if(nextBlockDOM.firstChild === null){
                     nextBlockDOM.focus();
                 }
+                // 새롭게 생긴 블럭의 0 pos에 caret 위치해야 함
+                // if (nextBlockDOM.firstChild !== null) {
+                //     // 새로 생긴 블럭에 내용이 있다면
+                //     setSelection(nextBlockDOM, 0, 0);
+                // } else {
+                //     nextBlockDOM.focus();
+                // }
             }
         }
         if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
@@ -118,9 +123,9 @@ const Editor = ({ pid, fetchPagesList }) => {
             if (prevBlockDOM) {
                 // 원래 그 전 블럭의 끝으로 caret 이동
                 // (만약 블럭 병합인 경우, 원래 그 전 블럭 끝으로 caret 배치)
-                console.log(prevBlockDOM.firstChild);
-                setSelection(prevBlockDOM, 0, prevBlockEnd);
-                // setCaretToEnd(prevBlockDOM);
+                // console.log(prevBlockDOM.firstChild);
+                // setSelection(prevBlockDOM, 0, prevBlockEnd);
+                // // setCaretToEnd(prevBlockDOM);
             }
         }
     }, [blocks, prevBlocks, curBlockID, prevBlockEnd]);
@@ -180,7 +185,8 @@ const Editor = ({ pid, fetchPagesList }) => {
         // 블럭 추가 함수
         setCurBlockID(curBlock.id);
         
-        const curCaretPos = getCaretPosition();
+        const curCaretPos = getCaretPosition(); // 여기서부터 틀려먹음. 현재 selection의 정보가 정확히 따지지 않음
+        // console.log(curCaretPos.startOffset, curCaretPos.endOffset);
 
         const nextBlockHTML = curBlock.html.slice(curCaretPos.endOffset);
         const newBlock = { id: uid(), tag: "p", html: nextBlockHTML };
