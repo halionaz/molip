@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const corsOption = {
-    origin: "http://localhost:3000",
+    origin: `${process.env.AWS_PUBLIC_IP}`,
 };
 
 // Set CORS option
